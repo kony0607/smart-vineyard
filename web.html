@@ -186,6 +186,83 @@
         </div>
     </section>
 
+    <!-- Section: Project Progress -->
+    <section id="progress" class="py-12 px-4 max-w-6xl mx-auto border-b border-gray-100">
+        <div class="text-center mb-8 scroll-reveal">
+            <span class="text-brand-main font-bold tracking-wider text-sm uppercase mb-2 block">Development Progress</span>
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-dark mb-2">現在の製作段階（％表示）</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto">各層ごとに進捗を見える化しました。詳細タスクは <a href="tasks.html" class="text-brand-main font-bold">タスク管理ページ</a> をご覧ください。</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Mechanical -->
+            <div class="bg-white p-6 rounded-2xl shadow scroll-reveal">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">機械層 (Mechanical)</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>CAD 設計</span><span id="m-cad-p">100%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="m-cad" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:100%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>3Dプリント出力</span><span id="m-print-p">0%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="m-print" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:0%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>アルミ外枠</span><span id="m-frame-p">100%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="m-frame" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:100%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>ラック取付・組立</span><span id="m-assembly-p">0%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="m-assembly" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control -->
+            <div class="bg-white p-6 rounded-2xl shadow scroll-reveal">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">制御層 (Control)</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>PWM 制御</span><span id="c-pwm-p">100%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="c-pwm" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:100%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>Python メイン制御</span><span id="c-python-p">100%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="c-python" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:100%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>センサ統合</span><span id="c-sensor-p">0%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="c-sensor" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:0%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>機構テスト</span><span id="c-test-p">0%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="c-test" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application -->
+            <div class="bg-white p-6 rounded-2xl shadow scroll-reveal">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">アプリ層 (Application)</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>UI (React)</span><span id="a-ui-p">100%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="a-ui" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:100%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>Firebase / DB</span><span id="a-db-p">0%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="a-db" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:0%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1 small"><span>LINE 連携</span><span id="a-line-p">0%</span></div>
+                        <div class="w-full bg-gray-200 rounded h-3"><div id="a-line" class="h-3 rounded bg-gradient-to-r from-brand-accent to-brand-main" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- Section 2: Architecture Diagram (NEW) -->
     <section id="architecture" class="py-24 bg-slate-50 tech-grid relative overflow-hidden">
         <!-- Background Elements -->
