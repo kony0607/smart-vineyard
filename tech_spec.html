@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技術仕様書 | Smart Vineyard Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                        mono: ['"Roboto Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#2c1810',
+                            main: '#581c87',
+                            light: '#f3e8ff',
+                            accent: '#84cc16',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
+        .spec-card { border-left: 4px solid #581c87; transition: transform 0.2s; }
+        .spec-card:hover { transform: translateX(5px); }
+        code { font-family: 'Roboto Mono', monospace; background: #f1f5f9; padding: 0.2rem 0.4rem; rounded: 0.25rem; font-size: 0.9em; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-accent selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='web.html'">
+                    <div class="w-8 h-8 bg-brand-main rounded-lg flex items-center justify-center text-white">
+                        <i class="fas fa-grapes"></i>
+                    </div>
+                    <span class="font-bold text-brand-dark text-lg">Smart Vineyard</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="web.html" class="text-gray-600 hover:text-brand-main text-sm font-medium transition-colors">
+                        <i class="fas fa-arrow-left mr-1"></i> ポートフォリオへ戻る
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-24 max-w-5xl mx-auto px-4">
+        <!-- Document Header -->
+        <div class="mb-16 animate-fade-in">
+            <div class="flex items-center gap-3 text-brand-main font-bold text-sm mb-4 tracking-widest uppercase">
+                <i class="fas fa-file-alt"></i> Official Documentation v1.2
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black text-brand-dark mb-6 tracking-tight">技術仕様書</h1>
+            <div class="flex flex-wrap gap-4 items-center text-gray-500 text-sm">
+                <span class="flex items-center gap-1"><i class="far fa-calendar"></i> 最終更新: 2026.01.30</span>
+                <span class="flex items-center gap-1"><i class="far fa-user"></i> 作成者: 近藤 未悠 / 小山 猛</span>
+                <span class="px-2 py-1 bg-brand-light text-brand-main rounded font-bold text-xs">CONFIDENTIAL</span>
+            </div>
+        </div>
+
+        <!-- TOC (Table of Contents) -->
+        <div class="glass-panel p-6 rounded-2xl mb-16 border border-brand-light">
+            <h2 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">目次 / Index</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                <a href="#section-1" class="text-brand-main hover:underline">1. システムアーキテクチャ概要</a>
+                <a href="#section-2" class="text-brand-main hover:underline">2. 機械・構造設計 (Fusion 360)</a>
+                <a href="#section-3" class="text-brand-main hover:underline">3. 電子回路・電力供給</a>
+                <a href="#section-4" class="text-brand-main hover:underline">4. ソフトウェアスタック</a>
+                <a href="#section-5" class="text-brand-main hover:underline">5. 部品表 (BOM)</a>
+            </div>
+        </div>
+
+        <!-- Section 1 -->
+        <section id="section-1" class="mb-20 scroll-mt-24">
+            <h2 class="text-2xl font-bold text-brand-dark mb-8 flex items-center gap-3">
+                <span class="w-8 h-8 rounded bg-brand-main text-white flex items-center justify-center text-sm">01</span>
+                システムアーキテクチャ概要
+            </h2>
+            <div class="prose prose-slate max-w-none text-gray-600 leading-relaxed space-y-4">
+                <p>
+                    本システムは、ブドウ園における雨よけビニールの開閉を、気象データおよび現地のセンサ情報に基づいて完全自動化することを目的としています。
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                    <div class="spec-card bg-white p-6 rounded-xl shadow-sm">
+                        <h4 class="font-bold text-brand-dark mb-2">エッジ層</h4>
+                        <p class="text-xs">Raspberry Piによるモータ制御、雨滴センサ・温湿度センサのデータサンプリング。</p>
+                    </div>
+                    <div class="spec-card bg-white p-6 rounded-xl shadow-sm">
+                        <h4 class="font-bold text-brand-dark mb-2">通信層</h4>
+                        <p class="text-xs">MQTTまたはHTTPを用いたFirebase Realtime Databaseとのリアルタイム同期。</p>
+                    </div>
+                    <div class="spec-card bg-white p-6 rounded-xl shadow-sm">
+                        <h4 class="font-bold text-brand-dark mb-2">アプリケーション層</h4>
+                        <p class="text-xs">React/Next.jsによる管理画面。LINE Messaging APIを用いたアラート通知。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section id="section-2" class="mb-20 scroll-mt-24">
+            <h2 class="text-2xl font-bold text-brand-dark mb-8 flex items-center gap-3">
+                <span class="w-8 h-8 rounded bg-brand-main text-white flex items-center justify-center text-sm">02</span>
+                機械・構造設計 (Fusion 360)
+            </h2>
+            <div class="space-y-8">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-bold mb-4 text-orange-600"><i class="fas fa-microchip mr-2"></i>R800 円弧ラック機構</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <table class="w-full text-sm">
+                                <tr class="border-b"><td class="py-2 text-gray-500">設計手法</td><td class="py-2 font-mono">Python API (Parametric)</td></tr>
+                                <tr class="border-b"><td class="py-2 text-gray-500">モジュール</td><td class="py-2">2.0 (Customized)</td></tr>
+                                <tr class="border-b"><td class="py-2 text-gray-500">曲率半径</td><td class="py-2">800 mm</td></tr>
+                                <tr class="border-b"><td class="py-2 text-gray-500">材質</td><td class="py-2">ASA (高耐候性フィラメント)</td></tr>
+                            </table>
+                        </div>
+                        <div class="bg-slate-100 rounded-xl flex items-center justify-center p-4">
+                            <span class="text-gray-400 text-xs italic text-center">
+                                <br>
+                                Pythonによる自動生成モデル
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-bold mb-4 text-orange-600"><i class="fas fa-vector-square mr-2"></i>2面固定マウント</h3>
+                    <p class="text-sm text-gray-600 mb-4">
+                        15x15アルミフレームと既存の木製支柱を接合するための専用ブラケット。Fusion 360の「アセンブリ」機能により、実機とのクリアランスを0.2mm単位で調整。
+                    </p>
+                    <ul class="grid grid-cols-2 gap-2 text-xs text-gray-500">
+                        <li><i class="fas fa-check text-green-500 mr-1"></i> M4 ボルト/ナット固定対応</li>
+                        <li><i class="fas fa-check text-green-500 mr-1"></i> インフィル密度 60% (強度重視)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section id="section-3" class="mb-20 scroll-mt-24">
+            <h2 class="text-2xl font-bold text-brand-dark mb-8 flex items-center gap-3">
+                <span class="w-8 h-8 rounded bg-brand-main text-white flex items-center justify-center text-sm">03</span>
+                電子回路・電力供給
+            </h2>
+            <div class="glass-panel p-8 rounded-2xl border-blue-100">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <h4 class="font-bold text-blue-700 mb-4 tracking-tighter uppercase text-sm">Controller Unit</h4>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center border-b border-blue-50 pb-2">
+                                <span class="text-sm text-gray-500">Main MCU</span>
+                                <span class="font-mono text-sm font-bold">Raspberry Pi 4 Model B</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-blue-50 pb-2">
+                                <span class="text-sm text-gray-500">Motor Driver</span>
+                                <span class="font-mono text-sm font-bold">TB6600 (High Torque Type)</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-blue-50 pb-2">
+                                <span class="text-sm text-gray-500">Power Supply</span>
+                                <span class="font-mono text-sm font-bold">AC 100V to DC 24V 10A</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-blue-700 mb-4 tracking-tighter uppercase text-sm">Sensor Network</h4>
+                        <div class="space-y-2">
+                            <div class="p-3 bg-blue-50 rounded-lg text-xs">
+                                <strong>雨滴センサ:</strong> 静電容量方式により降雨の瞬瞬を検知。
+                            </div>
+                            <div class="p-3 bg-blue-50 rounded-lg text-xs">
+                                <strong>リミットスイッチ:</strong> 原点復帰および脱調検知用。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4 -->
+        <section id="section-4" class="mb-20 scroll-mt-24">
+            <h2 class="text-2xl font-bold text-brand-dark mb-8 flex items-center gap-3">
+                <span class="w-8 h-8 rounded bg-brand-main text-white flex items-center justify-center text-sm">04</span>
+                ソフトウェアスタック
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-900 rounded-2xl p-6 text-white overflow-hidden relative">
+                    <i class="fab fa-python absolute -right-4 -bottom-4 text-8xl opacity-10"></i>
+                    <h4 class="text-brand-accent font-bold mb-4">Edge Control Logic</h4>
+                    <p class="text-xs text-gray-400 mb-4">Python 3.10 / RPi.GPIO</p>
+                    <ul class="text-sm space-y-2 text-gray-300">
+                        <li>・ 非同期処理によるセンサ監視</li>
+                        <li>・ 加減速制御(S-curve)による静かな駆動</li>
+                        <li>・ ログの定期的なFirebase送信</li>
+                    </ul>
+                </div>
+                <div class="bg-brand-main rounded-2xl p-6 text-white overflow-hidden relative">
+                    <i class="fab fa-react absolute -right-4 -bottom-4 text-8xl opacity-10"></i>
+                    <h4 class="text-brand-accent font-bold mb-4">Cloud Dashboard</h4>
+                    <p class="text-xs text-brand-light mb-4">React / Vite / Tailwind CSS</p>
+                    <ul class="text-sm space-y-2 text-brand-light/80">
+                        <li>・ リアルタイムステータス表示</li>
+                        <li>・ 遠隔手動操作割り込み機能</li>
+                        <li>・ 過去の開閉履歴グラフ化</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5 -->
+        <section id="section-5" class="mb-20 scroll-mt-24">
+            <h2 class="text-2xl font-bold text-brand-dark mb-8 flex items-center gap-3">
+                <span class="w-8 h-8 rounded bg-brand-main text-white flex items-center justify-center text-sm">05</span>
+                主要部品表 (BOM)
+            </h2>
+            <div class="glass-panel rounded-2xl overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-gray-600 uppercase text-xs font-bold">
+                            <th class="px-6 py-4 text-left">Category</th>
+                            <th class="px-6 py-4 text-left">Item Name</th>
+                            <th class="px-6 py-4 text-center">Qty</th>
+                            <th class="px-6 py-4 text-right">Vendor</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr>
+                            <td class="px-6 py-4 text-gray-400">Computing</td>
+                            <td class="px-6 py-4 font-bold">Raspberry Pi 4 Model B (4GB)</td>
+                            <td class="px-6 py-4 text-center font-mono">1</td>
+                            <td class="px-6 py-4 text-right">Amazon</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-gray-400">Actuator</td>
+                            <td class="px-6 py-4 font-bold">NEMA 23 Stepper Motor</td>
+                            <td class="px-6 py-4 text-center font-mono">1</td>
+                            <td class="px-6 py-4 text-right">OMC StepperOnline</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-gray-400">Mechanical</td>
+                            <td class="px-6 py-4 font-bold">Custom Arc Rack (3D Printed)</td>
+                            <td class="px-6 py-4 text-center font-mono">10</td>
+                            <td class="px-6 py-4 text-right">In-house (ASA)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-gray-400">Structure</td>
+                            <td class="px-6 py-4 font-bold">1515 Aluminum Extrusion (2m)</td>
+                            <td class="px-6 py-4 text-center font-mono">2</td>
+                            <td class="px-6 py-4 text-right">MISUMI</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-900 text-gray-500 py-12 text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <p class="text-xs uppercase tracking-widest mb-4">Engineering Documentation</p>
+            <p class="text-sm">&copy; 2025-2026 Smart Vineyard Project. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

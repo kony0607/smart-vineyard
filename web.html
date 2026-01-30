@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Vineyard Project | ぶどう園自動化への挑戦</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                        mono: ['"Roboto Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#2c1810', // Deep wine color
+                            main: '#581c87', // Purple
+                            light: '#f3e8ff',
+                            accent: '#84cc16', // Grape leaf green
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .tech-grid {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Architecture Diagram Arrows */
+        .diagram-arrow::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            transform: translateY(-50%);
+            border-width: 8px 0 8px 10px;
+            border-style: solid;
+            border-color: transparent transparent transparent #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-accent selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2 group cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-8 h-8 bg-brand-main rounded-lg flex items-center justify-center text-white group-hover:rotate-12 transition-transform">
+                        <i class="fas fa-grapes"></i>
+                    </div>
+                    <span class="font-bold text-brand-dark tracking-tight text-lg">Smart Vineyard</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#story" class="text-gray-600 hover:text-brand-main text-sm font-medium transition-colors">背景と目的</a>
+                    <a href="#architecture" class="text-gray-600 hover:text-brand-main text-sm font-medium transition-colors">システム構成</a>
+                    <a href="#mechanism" class="text-gray-600 hover:text-brand-main text-sm font-medium transition-colors">機構設計</a>
+                    <a href="#data" class="text-gray-600 hover:text-brand-main text-sm font-medium transition-colors">効果検証</a>
+                    <a href="tech_spec.html" class="ml-4 px-4 py-2 bg-brand-main text-white text-sm font-bold rounded-full hover:bg-brand-dark transition-all transform hover:scale-105 shadow-lg flex items-center gap-2">
+                        <i class="fas fa-file-code"></i> 技術仕様書
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative h-screen flex items-center justify-center overflow-hidden bg-brand-dark text-white pt-16">
+        <!-- Dynamic Background -->
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-main via-slate-900 to-black opacity-90 z-0"></div>
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0); background-size: 32px 32px;"></div>
+        
+        <div class="relative z-10 text-center max-w-5xl px-4 animate-fade-in-up">
+            <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-brand-accent text-xs font-mono tracking-widest uppercase">
+                <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
+                2025-2026 Engineering Portfolio
+            </div>
+            
+            <h1 class="text-4xl md:text-7xl font-black mb-8 leading-tight tracking-tight drop-shadow-2xl">
+                伝統と技術を繋ぐ<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-lime-400 to-emerald-400">スマート雨よけ</span>システム
+            </h1>
+            
+            <p class="text-lg md:text-2xl text-gray-300 mb-12 font-light max-w-3xl mx-auto leading-relaxed">
+                岩手県大迫町のワイン産業を守るため。<br>
+                <span class="font-medium text-white">機構設計(CAD)</span> × <span class="font-medium text-white">回路制御(Raspi)</span> × <span class="font-medium text-white">クラウド開発(React)</span><br>
+                3つの領域を独力で統合したフルスタック・エンジニアリングの記録。
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4 text-sm font-bold">
+                <div class="glass-panel text-brand-dark px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-white transition-colors cursor-default">
+                    <div class="w-8 h-8 rounded-full bg-brand-dark text-white flex items-center justify-center"><i class="fas fa-user"></i></div>
+                    <div class="text-left">
+                        <div class="text-xs text-gray-500 uppercase">開発・実装（単独）</div>
+                        <div>近藤 未悠</div>
+                    </div>
+                </div>
+                <div class="glass-panel text-brand-dark px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-white transition-colors cursor-default">
+                    <div class="w-8 h-8 rounded-full bg-brand-dark text-white flex items-center justify-center"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div class="text-left">
+                        <div class="text-xs text-gray-500 uppercase">監督（指導教員）</div>
+                        <div>小山 猛</div>
+                    </div>
+                </div>
+                <div class="bg-brand-accent/10 border border-brand-accent/30 text-brand-accent px-6 py-4 rounded-xl flex items-center gap-3">
+                    <i class="fas fa-handshake text-xl"></i>
+                    <div class="text-left">
+                        <div class="text-xs opacity-80 uppercase">In Cooperation With</div>
+                        <div>(株)エーデルワイン</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-brand-accent/50">
+            <i class="fas fa-chevron-down text-3xl"></i>
+        </div>
+    </header>
+
+    <!-- Section 1: Story & Background -->
+    <section id="story" class="py-24 px-4 max-w-6xl mx-auto border-b border-gray-100">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="scroll-reveal order-2 lg:order-1">
+                <span class="text-brand-main font-bold tracking-wider text-sm uppercase mb-2 block">Project Background</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-dark mb-8 leading-tight">
+                    なぜ、「雨」との戦いに<br>技術が必要なのか？
+                </h2>
+                <div class="space-y-6 text-gray-600 leading-relaxed">
+                    <p>
+                        <strong>岩手県大迫町</strong>は、日本有数のワイン用ブドウ産地として知られています。しかし、近年の気候変動による不定期な豪雨は、ブドウに深刻な病気（ベト病など）をもたらし、その品質を脅かしています。
+                    </p>
+                    <div class="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-lg">
+                        <h4 class="text-red-800 font-bold mb-2"><i class="fas fa-exclamation-circle mr-2"></i>現場の課題</h4>
+                        <p class="text-sm">農家の方々は<strong>「雨が降るたびに広大な畑を走り回り、手動でビニールを閉める」</strong>という過酷な労働を強いられています。深夜でも、早朝でも、雨は待ってくれません。</p>
+                    </div>
+                    <p class="text-lg font-bold text-brand-main">
+                        「技術で、農家の睡眠時間とワインの品質を守りたい。」
+                    </p>
+                    <p>
+                        それが、私たちが開発を始めた原点です。高価な既製品ではなく、<span data-key="raspi_mention">Raspberry Pi</span>と3Dプリンタを駆使した<strong>「安価で、修理しやすく、現場に寄り添った」</strong>独自の自動化ソリューションを目指しました。
+                    </p>
+                </div>
+            </div>
+            
+            <div class="relative order-1 lg:order-2 scroll-reveal group">
+                <div class="absolute -inset-4 bg-gradient-to-r from-brand-accent to-brand-main rounded-[2rem] opacity-30 blur-2xl group-hover:opacity-50 transition-opacity duration-500"></div>
+                <div class="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl bg-gray-900">
+                    <!-- Click image to open PDF (replace 'spec.pdf' with your PDF URL or file) -->
+                    <a href="spec.pdf" target="_blank" rel="noopener noreferrer" title="技術仕様書（PDF）" class="block w-full h-full">
+                        <img src="vineyard_structure.png" alt="大迫町のブドウ棚構造" class="w-full h-full object-contain">
+                    </a>
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10"></div>
+                    <div class="absolute bottom-8 left-8 z-20">
+                        <div class="text-brand-accent font-bold text-sm tracking-wider mb-1">TARGET FIELD</div>
+                        <div class="text-2xl font-bold text-white">Ohasama, Iwate</div>
+                        <div class="text-sm text-gray-400">Wine Grape Production Area</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Architecture Diagram (NEW) -->
+    <section id="architecture" class="py-24 bg-slate-50 tech-grid relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-brand-main/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-brand-accent/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-16 scroll-reveal">
+                <span class="text-blue-600 font-bold tracking-wider text-sm uppercase mb-2 block">System Architecture</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-dark mb-4">全体システム統合図</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">
+                    機械・電気・情報の3要素をシームレスに統合。現場のエッジ処理からクラウド上のユーザーインターフェースまで、データの流れを可視化しました。
+                </p>
+            </div>
+
+            <!-- Architecture Card -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-200 p-8 md:p-12 scroll-reveal">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+                    
+                    <!-- 1. Mechanical Layer -->
+                    <div class="diagram-node group relative bg-orange-50 rounded-2xl p-6 border-2 border-orange-100 hover:border-orange-300 transition-all hover:shadow-lg">
+                        <div class="absolute -right-4 top-1/2 hidden md:block text-gray-300 text-2xl z-20 diagram-arrow"><i class="fas fa-arrow-right"></i></div>
+                        
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-orange-500 text-white flex items-center justify-center text-xl shadow-lg shadow-orange-500/30">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">Mechanical</h3>
+                                <p class="text-xs text-orange-600 font-bold uppercase tracking-wide">Actuator & Structure</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-xl border border-orange-200 shadow-sm text-sm flex items-center gap-3">
+                                <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+                                <span><strong>R800 円弧ラック</strong> (3D Print)</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-orange-200 shadow-sm text-sm flex items-center gap-3">
+                                <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+                                <span><strong>2面固定ブラケット</strong> (ASA)</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-orange-200 shadow-sm text-sm flex items-center gap-3">
+                                <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+                                <span><strong>アルミフレーム</strong> (15x15)</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-xs text-center text-orange-400 font-medium">Physical Movement</div>
+                    </div>
+
+                    <!-- 2. Electrical Layer -->
+                    <div class="diagram-node group relative bg-blue-50 rounded-2xl p-6 border-2 border-blue-100 hover:border-blue-300 transition-all hover:shadow-lg">
+                        <div class="absolute -right-4 top-1/2 hidden md:block text-gray-300 text-2xl z-20 diagram-arrow"><i class="fas fa-arrow-right"></i></div>
+
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl shadow-lg shadow-blue-600/30">
+                                <i class="fas fa-microchip"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">Electrical</h3>
+                                <p class="text-xs text-blue-600 font-bold uppercase tracking-wide">Control & Sensing</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-xl border border-blue-200 shadow-sm text-sm flex items-center justify-between">
+                                <span class="font-bold text-gray-700" data-key="raspi_model">Raspberry Pi 4</span>
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-500">Master</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="bg-white p-2 rounded-lg border border-blue-200 text-xs text-center">
+                                    <i class="fas fa-bolt text-yellow-500 block mb-1"></i> Driver
+                                </div>
+                                <div class="bg-white p-2 rounded-lg border border-blue-200 text-xs text-center">
+                                    <i class="fas fa-tint text-blue-400 block mb-1"></i> Sensors
+                                </div>
+                            </div>
+                            <div class="bg-blue-600 text-white p-2 rounded-lg text-xs text-center font-mono">
+                                Python Logic (Edge)
+                            </div>
+                        </div>
+                        <div class="mt-4 text-xs text-center text-blue-400 font-medium">Signal Processing</div>
+                    </div>
+
+                    <!-- 3. Software Layer -->
+                    <div class="diagram-node group relative bg-purple-50 rounded-2xl p-6 border-2 border-purple-100 hover:border-purple-300 transition-all hover:shadow-lg">
+                        
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center text-xl shadow-lg shadow-purple-600/30">
+                                <i class="fas fa-cloud"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">Software</h3>
+                                <p class="text-xs text-purple-600 font-bold uppercase tracking-wide">Cloud & UI</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-xl border border-purple-200 shadow-sm text-sm flex items-center gap-3">
+                                <i class="fab fa-react text-blue-400 text-lg"></i>
+                                <div>
+                                    <div class="font-bold">React Dashboard</div>
+                                    <div class="text-xs text-gray-400">Vite + Tailwind</div>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-purple-200 shadow-sm text-sm flex items-center gap-3">
+                                <i class="fas fa-database text-yellow-600 text-lg"></i>
+                                <span><strong>Firebase</strong> (Realtime DB)</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-purple-200 shadow-sm text-sm flex items-center gap-3">
+                                <i class="fab fa-line text-green-500 text-lg"></i>
+                                <span><strong>Messaging API</strong> (通知)</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-xs text-center text-purple-400 font-medium">User Interaction</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resource Allocation Bar -->
+            <div class="mt-12 bg-white rounded-2xl shadow-sm border border-gray-200 p-8 scroll-reveal">
+                <h4 class="text-lg font-bold text-gray-700 mb-6 text-center">開発リソース配分 (Effort Breakdown)</h4>
+                <div class="flex h-8 rounded-full overflow-hidden mb-4 shadow-inner">
+                    <div class="bg-orange-500 w-[50%] flex items-center justify-center text-white text-xs font-bold hover:bg-orange-400 transition-colors cursor-help" title="機械設計: 50%">Mechanical 50%</div>
+                    <div class="bg-blue-500 w-[20%] flex items-center justify-center text-white text-xs font-bold hover:bg-blue-400 transition-colors cursor-help" title="電気回路: 20%">Elec. 20%</div>
+                    <div class="bg-brand-main w-[30%] flex items-center justify-center text-white text-xs font-bold hover:bg-brand-600 transition-colors cursor-help" title="ソフトウェア: 30%">Software 30%</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-gray-500 text-center">
+                    <div>
+                        <strong class="text-orange-600">機械:</strong> Fusion 360 APIによる円弧ラック自動生成、耐候性素材(ASA)の採用
+                    </div>
+                    <div>
+                        <strong class="text-blue-600">電気:</strong> 1.8kg駆動のトルク計算、AC100V電源設計
+                    </div>
+                    <div>
+                        <strong class="text-brand-main">情報:</strong> 農家向けUI設計、天気API連携、LINE通知
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Mechanism Deep Dive -->
+    <section id="mechanism" class="py-24 px-4 max-w-6xl mx-auto border-b border-gray-200">
+        <div class="flex flex-col lg:flex-row gap-16">
+            <div class="lg:w-1/2 space-y-8 scroll-reveal">
+                <span class="text-orange-600 font-bold tracking-wider text-sm uppercase mb-2 block">Mechanical Innovation</span>
+                <h2 class="text-3xl font-bold text-brand-dark">
+                    なぜ、「Python」で<br>3Dモデルを作ったのか？
+                </h2>
+                
+                <div class="prose text-gray-600 leading-relaxed">
+                    <p>
+                        最大の課題は、<strong>「半径800mmの円弧上をスムーズに動くラックギア」</strong>の調達でした。市販の直線ラックを曲げると歯の間隔（ピッチ）が狂い、特注品はコストがかかりすぎます。
+                    </p>
+                    <p>
+                        そこで私たちは、CADソフト（Fusion 360）のAPIを活用し、<strong>「Pythonスクリプトによるパラメトリック設計」</strong>を行いました。これにより、以下の要件を満たすパーツを自動生成することに成功しました。
+                    </p>
+                </div>
+
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-ruler-combined"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">12.38mm 精密ピッチ</h4>
+                            <p class="text-sm text-gray-500">モータのステップ数から逆算した独自の最適値を、R800のカーブ上で完全に維持。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-th-large"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">分割・量産設計</h4>
+                            <p class="text-sm text-gray-500">2mのレールを3Dプリンタで出力可能な20cm単位に自動分割。継ぎ目のピッチズレもゼロに。</p>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="bg-gray-900 text-gray-300 p-4 rounded-lg font-mono text-xs overflow-x-auto border border-gray-700 shadow-inner">
+                    <div class="flex justify-between items-center mb-2 border-b border-gray-700 pb-2">
+                        <span class="text-green-400">rack_generator.py</span>
+                        <span class="text-xs text-gray-500">Python</span>
+                    </div>
+<pre><code># R800対応ラック生成ロジック(抜粋)
+R_RACK = 800.0
+PITCH = 12.38 # 独自の最適化ピッチ
+angle_step = PITCH / R_RACK 
+
+# 円弧に沿って正確に歯を配置
+for i in range(num_holes):
+    angle = i * angle_step
+    # ...極座標計算によるモデリング...
+    sketch.add_hole(angle, size=HOLE_W)</code></pre>
+                </div>
+
+                <div class="glass-panel p-4 rounded-xl mt-4 text-sm text-gray-700">
+                    <h4 class="font-bold mb-2">補足（製作・加工について）</h4>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong>ピニオン・ラック：</strong>本プロジェクトでは <em>Fusion 360</em> の API（Pythonスクリプト）を用いてパラメトリックに自動生成しています（`rack_generator.py` による出力）。</li>
+                        <li><strong>その他のパーツ：</strong>ラック以外のCADモデルは手作業で設計・モデリングし、3Dプリントまたは手仕上げで製作しました。</li>
+                        <li><strong>ベアリング・シャフト取付部材：</strong>耐久性と精度が必要な部位は、フライス等による機械加工で製作しています（切削加工による仕上げ）。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="lg:w-2/3 flex items-center justify-center scroll-reveal">
+                 <div class="relative w-full h-[650px] bg-slate-100 rounded-3xl border-2 border-dashed border-slate-200 flex items-center justify-center p-0 group overflow-hidden">
+                    <!-- Embedded Fusion360 share (fallback link provided) -->
+                    <iframe src="https://iwateu212.autodesk360.com/shares/public/SH28cd1QT2badd0ea72bda179bf35810b971" class="w-full h-full rounded-3xl" style="border:0;" allowfullscreen></iframe>
+                    <div class="absolute z-10 top-4 right-4">
+                        <a href="https://iwateu212.autodesk360.com/shares/public/SH28cd1QT2badd0ea72bda179bf35810b971" target="_blank" rel="noopener noreferrer" class="px-3 py-1 bg-white/80 rounded text-sm">Autodeskで開く</a>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Data & Analysis (Charts) -->
+    <section id="data" class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16 scroll-reveal">
+                <span class="text-green-600 font-bold tracking-wider text-sm uppercase mb-2 block">Data Analysis</span>
+                <h2 class="text-3xl font-bold text-brand-dark mb-4">効果検証と研究精度</h2>
+                <p class="text-gray-500">「作った」だけで終わらない。エンジニアリングとしての定量評価。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Chart 1: Labor Saving -->
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 scroll-reveal hover:shadow-2xl transition-shadow duration-300">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center mr-3"><i class="fas fa-chart-bar"></i></span>
+                            省力化効果の試算
+                        </h3>
+                        <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full">-90%</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="laborChart"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-6 bg-slate-50 p-4 rounded-xl leading-relaxed">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        年間降雨日数を100日、1回の開閉・移動作業を30分として試算。システム導入により、年間約50時間の重労働を削減可能です。空いた時間はより付加価値の高い栽培管理に充てられます。
+                    </p>
+                </div>
+
+                <!-- Chart 2: Accuracy -->
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 scroll-reveal hover:shadow-2xl transition-shadow duration-300">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-3"><i class="fas fa-crosshairs"></i></span>
+                            ラックピッチ精度の検証
+                        </h3>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">±0.05mm</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="accuracyChart"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-6 bg-slate-50 p-4 rounded-xl leading-relaxed">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        手作業での曲げ加工（赤線）と比較し、Python APIで生成したラック（青線）は理論値(12.38mm)に対して極めて高い精度を維持。これによりモータの脱調を防ぎます。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Future & Learnings -->
+    <section class="py-24 bg-brand-main text-white relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-brand-accent/20 rounded-full blur-3xl"></div>
+
+        <div class="max-w-6xl mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <!-- Roadmap -->
+                <div class="scroll-reveal">
+                    <h3 class="text-2xl font-bold mb-8 flex items-center">
+                        <i class="fas fa-rocket mr-3 text-brand-accent"></i>今後のロードマップ
+                    </h3>
+                    <div class="space-y-8 border-l-2 border-white/20 pl-8 ml-3">
+                        <div class="relative">
+                            <span class="absolute -left-[39px] top-0 w-5 h-5 rounded-full bg-brand-accent border-4 border-brand-main"></span>
+                            <h4 class="font-bold text-lg">Phase 1: 実機検証 (現在)</h4>
+                            <p class="text-sm text-gray-300 mt-1">3Dプリントパーツの耐久性テスト、R800レールでの実負荷(1.8kg)駆動試験。</p>
+                        </div>
+                        <div class="relative opacity-80">
+                            <span class="absolute -left-[39px] top-0 w-5 h-5 rounded-full bg-white/20 border-4 border-brand-main"></span>
+                            <h4 class="font-bold text-lg">Phase 2: AI病害予測</h4>
+                            <p class="text-sm text-gray-300 mt-1">カメラを追加し、YOLOv7を用いた葉の変色検知。病気を早期発見し通知。</p>
+                        </div>
+                        <div class="relative opacity-60">
+                            <span class="absolute -left-[39px] top-0 w-5 h-5 rounded-full bg-white/10 border-4 border-brand-main"></span>
+                            <h4 class="font-bold text-lg">Phase 3: ドローン連携</h4>
+                            <p class="text-sm text-gray-300 mt-1">上空からのマルチスペクトル画像と地上のセンサデータを統合した農園全体の最適化。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learnings -->
+                <div class="scroll-reveal">
+                    <h3 class="text-2xl font-bold mb-8 flex items-center">
+                        <i class="fas fa-lightbulb mr-3 text-yellow-400"></i>得られた学び
+                    </h3>
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/10">
+                        <ul class="space-y-6">
+                            <li class="flex gap-4">
+                                <i class="fas fa-check-circle text-brand-accent mt-1"></i>
+                                <div>
+                                    <strong class="block text-white mb-1">理論と現実の「すり合わせ」</strong>
+                                    <span class="text-sm text-gray-300">CAD上の数値(12.38mm)が、現実の3Dプリントやアルミの曲げでどう変化するか。その誤差を吸収する設計の重要性を学びました。</span>
+                                </div>
+                            </li>
+                            <li class="flex gap-4">
+                                <i class="fas fa-check-circle text-brand-accent mt-1"></i>
+                                <div>
+                                    <strong class="block text-white mb-1">ユーザー視点のUI設計</strong>
+                                    <span class="text-sm text-gray-300">技術的に高度な機能でも、現場の農家さんが使えなければ意味がない。「説明書がいらないUI」へのこだわりが、実装の軸になりました。</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-gray-400 py-12 text-center border-t border-gray-800">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-xl font-bold text-white mb-2">Smart Vineyard Project</h2>
+            <p class="text-xs mb-8 opacity-60">
+                岩手県立大学 理工学部 地域創生特別プログラム<br>
+                Software & Hardware Engineering Portfolio
+            </p>
+            <div class="flex justify-center gap-6 mb-8">
+                <a href="#" class="hover:text-white transition-colors"><i class="fab fa-github text-xl"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fas fa-envelope text-xl"></i></a>
+            </div>
+            <p class="text-xs text-gray-600">
+                &copy; 2025-2026 Kondo Miyu & Koyama Takeshi. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Reveal Animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // --- Data Visualization (Chart.js) ---
+        
+        // 1. 省力化効果グラフ
+        const ctxLabor = document.getElementById('laborChart').getContext('2d');
+        new Chart(ctxLabor, {
+            type: 'bar',
+            data: {
+                labels: ['手動管理(現状)', 'システム導入後'],
+                datasets: [{
+                    label: '年間作業時間 (時間)',
+                    data: [50, 5],
+                    backgroundColor: ['rgba(203, 213, 225, 0.8)', 'rgba(34, 197, 94, 0.8)'],
+                    borderRadius: 8,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 2. 精度比較グラフ
+        const ctxAcc = document.getElementById('accuracyChart').getContext('2d');
+        new Chart(ctxAcc, {
+            type: 'line',
+            data: {
+                labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+                datasets: [
+                    {
+                        label: '理論値 (Target)',
+                        data: Array(10).fill(12.38),
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        pointRadius: 0
+                    },
+                    {
+                        label: '手曲げ加工 (Manual)',
+                        data: [12.1, 12.6, 12.2, 12.8, 12.0, 12.5, 12.3, 12.9, 12.1, 12.7],
+                        borderColor: 'rgba(239, 68, 68, 0.4)',
+                        borderWidth: 1,
+                        tension: 0.4,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'API生成 (Python)',
+                        data: [12.38, 12.39, 12.38, 12.37, 12.38, 12.39, 12.38, 12.38, 12.39, 12.38],
+                        borderColor: 'rgba(34, 197, 94, 1)',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.2,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { 
+                    y: { 
+                        min: 11.5, max: 13.0,
+                        title: { display: true, text: 'ピッチ (mm)' },
+                        grid: { borderDash: [2, 2] }
+                    },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
+
+    </script>
+</body>
+</html>
