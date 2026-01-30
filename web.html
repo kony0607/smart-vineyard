@@ -261,6 +261,39 @@
             </div>
         </div>
     </section>
+        <script>
+            (function(){
+                const STORAGE_KEY = 'sv_tasks_v1';
+                function load(){ const s = localStorage.getItem(STORAGE_KEY); return s?JSON.parse(s):[]; }
+                function computePercent(target){
+                    const tasks = load().filter(t=>t.target===target);
+                    if(tasks.length===0) return null;
+                    const done = tasks.filter(t=>t.completed).length;
+                    return Math.round(done/tasks.length*100);
+                }
+
+                function apply(){
+                    const mapping = {
+                        'm-cad':'m-cad', 'm-print':'m-print','m-frame':'m-frame','m-assembly':'m-assembly',
+                        'c-pwm':'c-pwm','c-python':'c-python','c-sensor':'c-sensor','c-test':'c-test',
+                        'a-ui':'a-ui','a-db':'a-db','a-line':'a-line'
+                    };
+                    Object.keys(mapping).forEach(k=>{
+                        const p = computePercent(k);
+                        const el = document.getElementById(k);
+                        const label = document.getElementById(k+'-p');
+                        if(p===null){ /* keep existing */ return; }
+                        if(el) el.style.width = p+'%';
+                        if(label) label.textContent = p+'%';
+                    });
+                }
+
+                apply();
+                window.addEventListener('storage', apply);
+                // also poll in case same-page changes
+                setInterval(apply, 2000);
+            })();
+        </script>
 
 
     <!-- Section 2: Architecture Diagram (NEW) -->
