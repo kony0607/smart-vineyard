@@ -4,6 +4,9 @@ collections_config:
     path: ''
     icon: wysiwyg
     disable_url: false
+    _inputs:
+      $.meta.title:
+        cascade: true
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
