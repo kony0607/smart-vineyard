@@ -14,33 +14,35 @@ hero:
   sub: |-
     岩手県大迫町のワイン産業を守るため。
     機構設計(CAD) × 回路制御(Raspi) × クラウド開発(React)
-  sub_plain: 岩手県大迫町のワイン産業を守るため。 機構設計(CAD) × 回路制御(Raspi) × クラウド開発(React) 3つの領域を独力で統合したフルスタック・エンジニアリングの記録。
+  sub_plain: >-
+    岩手県大迫町のワイン産業を守るため。 機構設計(CAD) × 回路制御(Raspi) × クラウド開発(React)
+    3つの領域を独力で統合したフルスタック・エンジニアリングの記録。
 team:
-  author: 近藤 未悠
+  author: 近藤
   supervisor: 小山 猛
   cooperation: (株)エーデルワイン
 story:
   lead: >-
     岩手県大迫町は、日本有数のワイン用ブドウ産地として知られています。しかし、近年の気候変動による不定期な豪雨は、ブドウに深刻な病気（ベト病など）をもたらし、その品質を脅かしています。
-  lead_plain: 岩手県大迫町は、日本有数のワイン用ブドウ産地として知られています。しかし、近年の気候変動による不定期な豪雨は、ブドウに深刻な病気（ベト病など）をもたらし、その品質を脅かしています。
+  lead_plain: >-
+    岩手県大迫町は、日本有数のワイン用ブドウ産地として知られています。しかし、近年の気候変動による不定期な豪雨は、ブドウに深刻な病気（ベト病など）をもたらし、その品質を脅かしています。
 progress:
-  summary: >-
-    各層ごとに進捗を見える化しました。詳細タスクは [タスク管理ページ](tasks.html) をご覧ください。
+  summary: 各層ごとに進捗を見える化しました。詳細タスクは [タスク管理ページ](tasks.html) をご覧ください。
 architecture:
-  summary: >-
-    機械・電気・情報の3要素をシームレスに統合。現場のエッジ処理からクラウド上のユーザーインターフェースまで、データの流れを可視化しました。
+  summary: 機械・電気・情報の3要素をシームレスに統合。現場のエッジ処理からクラウド上のユーザーインターフェースまで、データの流れを可視化しました。
 mechanism:
   detail: >-
     最大の課題は、"半径800mmの円弧上をスムーズに動くラックギア"の調達でした。市販の直線ラックを曲げると歯の間隔（ピッチ）が狂い、特注品はコストがかかりすぎます。
 
-    そこで私たちは、CADソフト（Fusion 360）のAPIを活用し、"Pythonスクリプトによるパラメトリック設計"を行いました。これにより、パーツを自動生成することに成功し、精度と量産性を両立しました。
+    そこで私たちは、CADソフト（Fusion
+    360）のAPIを活用し、"Pythonスクリプトによるパラメトリック設計"を行いました。これにより、パーツを自動生成することに成功し、精度と量産性を両立しました。
 data:
-  analysis_intro: >-
-    「作った」だけで終わらない。エンジニアリングとしての定量評価。
+  analysis_intro: 「作った」だけで終わらない。エンジニアリングとしての定量評価。
   labor_note: >-
     年間降雨日数を100日、1回の開閉・移動作業を30分として試算。システム導入により、年間約50時間の重労働を削減可能です。空いた時間はより付加価値の高い栽培管理に充てられます。
   accuracy_note: >-
-    手作業での曲げ加工（赤線）と比較し、Python APIで生成したラック（青線）は理論値(12.38mm)に対して極めて高い精度を維持。これによりモータの脱調を防ぎます。
+    手作業での曲げ加工（赤線）と比較し、Python
+    APIで生成したラック（青線）は理論値(12.38mm)に対して極めて高い精度を維持。これによりモータの脱調を防ぎます。
   labor_labels:
     - 手動管理(現状)
     - システム導入後
@@ -51,12 +53,12 @@ data:
   accuracy_api_label: API生成 (Python)
 future:
   roadmap: >-
-    Phase 1: 実機検証 (現在)\n3Dプリントパーツの耐久性テスト、R800レールでの実負荷(1.8kg)駆動試験。\n\nPhase 2: AI病害予測\nカメラを追加し、YOLOv7を用いた葉の変色検知。病気を早期発見し通知。\n\nPhase 3: ドローン連携\n上空からのマルチスペクトル画像と地上のセンサデータを統合した農園全体の最適化。
-  learnings: >-
-    理論と現実の「すり合わせ」や「ユーザー視点のUI設計」など、開発で得られた知見をここにまとめることができます。
+    Phase 1: 実機検証 (現在)\n3Dプリントパーツの耐久性テスト、R800レールでの実負荷(1.8kg)駆動試験。\n\nPhase 2:
+    AI病害予測\nカメラを追加し、YOLOv7を用いた葉の変色検知。病気を早期発見し通知。\n\nPhase 3:
+    ドローン連携\n上空からのマルチスペクトル画像と地上のセンサデータを統合した農園全体の最適化。
+  learnings: 理論と現実の「すり合わせ」や「ユーザー視点のUI設計」など、開発で得られた知見をここにまとめることができます。
 footer:
-  copy: >-
-    岩手県立大学 理工学部 地域創生特別プログラム\nSoftware & Hardware Engineering Portfolio
+  copy: 岩手県立大学 理工学部 地域創生特別プログラム\nSoftware & Hardware Engineering Portfolio
 ---
 <!DOCTYPE html>
 <html lang="ja">
@@ -163,7 +165,7 @@ footer:
             </div>
             <h1 class="text-4xl md:text-7xl font-black mb-8 leading-tight tracking-tight drop-shadow-2xl">
                 <span data-cloudcannon-field="hero.heading_line1" contenteditable="true" class="cursor-text">伝統と技術を繋ぐ</span><br />
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-lime-400 to-emerald-400" data-cloudcannon-field="hero.heading_highlight" contenteditable="true" class="cursor-text">スマート雨よけ</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-lime-400 to-emerald-400" data-cloudcannon-field="hero.heading_highlight" contenteditable="true">スマート雨よけ</span>
                 <span data-cloudcannon-field="hero.heading_suffix" contenteditable="true" class="cursor-text">システム</span>
             </h1>
             
@@ -199,7 +201,7 @@ footer:
         <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-brand-accent/50">
             <i class="fas fa-chevron-down text-3xl"></i>
         </div>
-    </div></header>
+    </header>
 
     <!-- Section 1: Story & Background -->
     <section id="story" class="py-24 px-4 max-w-6xl mx-auto border-b border-gray-100">
@@ -601,7 +603,7 @@ for i in range(num_holes):
                         <i class="fas fa-info-circle mr-1"></i>
                         <span data-cloudcannon-field="data.labor_note|markdown">年間降雨日数を100日、1回の開閉・移動作業を30分として試算。システム導入により、年間約50時間の重労働を削減可能です。空いた時間はより付加価値の高い栽培管理に充てられます。</span>
                     </p>
-                </div>
+                
 
                 <!-- Chart 2: Accuracy -->
                 <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 scroll-reveal hover:shadow-2xl transition-shadow duration-300">
@@ -620,8 +622,8 @@ for i in range(num_holes):
                         <span data-cloudcannon-field="data.accuracy_note|markdown">手作業での曲げ加工（赤線）と比較し、Python APIで生成したラック（青線）は理論値(12.38mm)に対して極めて高い精度を維持。これによりモータの脱調を防ぎます。</span>
                     </p>
                 </div>
-            </div>
-        </div>
+            
+        
     </section>
 
     <!-- Section 5: Future & Learnings -->
