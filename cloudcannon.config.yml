@@ -10,6 +10,9 @@ collections_config:
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
+_inputs:
+  $.meta.title:
+    cascade: true
 timezone: Etc/UTC
 output_dir: _site
 common_config:
