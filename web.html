@@ -41,6 +41,13 @@ data:
     年間降雨日数を100日、1回の開閉・移動作業を30分として試算。システム導入により、年間約50時間の重労働を削減可能です。空いた時間はより付加価値の高い栽培管理に充てられます。
   accuracy_note: >-
     手作業での曲げ加工（赤線）と比較し、Python APIで生成したラック（青線）は理論値(12.38mm)に対して極めて高い精度を維持。これによりモータの脱調を防ぎます。
+  labor_labels: - 手動管理(現状)
+    - システム導入後
+  labor_dataset_label: 年間作業時間 (時間)
+  accuracy_y_title: ピッチ (mm)
+  accuracy_theory_label: 理論値 (Target)
+  accuracy_manual_label: 手曲げ加工 (Manual)
+  accuracy_api_label: API生成 (Python)
 future:
   roadmap: >-
     Phase 1: 実機検証 (現在)\n3Dプリントパーツの耐久性テスト、R800レールでの実負荷(1.8kg)駆動試験。\n\nPhase 2: AI病害予測\nカメラを追加し、YOLOv7を用いた葉の変色検知。病気を早期発見し通知。\n\nPhase 3: ドローン連携\n上空からのマルチスペクトル画像と地上のセンサデータを統合した農園全体の最適化。
@@ -168,7 +175,7 @@ footer:
                     <div class="w-8 h-8 rounded-full bg-brand-dark text-white flex items-center justify-center"><i class="fas fa-user"></i></div>
                     <div class="text-left">
                         <div class="text-xs text-gray-500 uppercase">開発・実装（単独）</div>
-                        <div data-cloudcannon-field="team.author">近藤 未悠</div>
+                        <div data-cloudcannon-field="team.author|markdown" contenteditable="true" class="cursor-text">近藤 未悠</div>
                     </div>
                 </div>
                 <div class="glass-panel text-brand-dark px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-white transition-colors cursor-text">
@@ -223,7 +230,7 @@ footer:
                 <div class="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl bg-gray-900">
                     <!-- Click image to open PDF (replace 'spec.pdf' with your PDF URL or file) -->
                     <a href="spec.pdf" target="_blank" rel="noopener noreferrer" title="技術仕様書（PDF）" class="block w-full h-full">
-                        <img src="vineyard_structure.png" alt="大迫町のブドウ棚構造" class="w-full h-full object-contain" />
+                        <img src="vineyard_structure.png" alt="大迫町のブドウ棚構造" class="w-full h-full object-contain" data-cloudcannon-field="story.image|image" />
                     </a>
                     <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10"></div>
                     <div class="absolute bottom-8 left-8 z-20">
@@ -571,11 +578,15 @@ for i in range(num_holes):
                 <h2 class="text-3xl font-bold text-brand-dark mb-4">効果検証と研究精度</h2>
                 <p class="text-gray-500" data-cloudcannon-field="data.analysis_intro|markdown">「作った」だけで終わらない。エンジニアリングとしての定量評価。</p>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <!-- Chart 1: Labor Saving -->
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 scroll-reveal hover:shadow-2xl transition-shadow duration-300">
-                    <div class="flex items-center justify-between mb-6">
+            <!-- Chart meta (hidden, editable via sidebar) -->
+            <div id="chart-meta" class="hidden" aria-hidden="true">
+                <span id="labor-labels" data-cloudcannon-field="data.labor_labels">手動管理(現状),システム導入後</span>
+                <span id="labor-dataset-label" data-cloudcannon-field="data.labor_dataset_label">年間作業時間 (時間)</span>
+                <span id="accuracy-y-title" data-cloudcannon-field="data.accuracy_y_title">ピッチ (mm)</span>
+                <span id="accuracy-theory-label" data-cloudcannon-field="data.accuracy_theory_label">理論値 (Target)</span>
+                <span id="accuracy-manual-label" data-cloudcannon-field="data.accuracy_manual_label">手曲げ加工 (Manual)</span>
+                <span id="accuracy-api-label" data-cloudcannon-field="data.accuracy_api_label">API生成 (Python)</span>
+            </div>
                         <h3 class="text-xl font-bold text-gray-800 flex items-center">
                             <span class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center mr-3"><i class="fas fa-chart-bar"></i></span>
                             省力化効果の試算
@@ -714,80 +725,94 @@ for i in range(num_holes):
         
         // 1. 省力化効果グラフ
         const ctxLabor = document.getElementById('laborChart').getContext('2d');
-        new Chart(ctxLabor, {
-            type: 'bar',
-            data: {
-                labels: ['手動管理(現状)', 'システム導入後'],
-                datasets: [{
-                    label: '年間作業時間 (時間)',
-                    data: [50, 5],
-                    backgroundColor: ['rgba(203, 213, 225, 0.8)', 'rgba(34, 197, 94, 0.8)'],
-                    borderRadius: 8,
-                    barThickness: 40
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { display: false } },
-                    y: { grid: { display: false } }
+        (function(){
+            const laborLabelElem = document.getElementById('labor-labels');
+            const laborLabels = laborLabelElem ? laborLabelElem.innerText.split(',').map(s=>s.trim()).filter(Boolean) : ['手動管理(現状)','システム導入後'];
+            const laborDatasetLabelElem = document.getElementById('labor-dataset-label');
+            const laborDatasetLabel = laborDatasetLabelElem ? laborDatasetLabelElem.innerText.trim() : '年間作業時間 (時間)';
+
+            new Chart(ctxLabor, {
+                type: 'bar',
+                data: {
+                    labels: laborLabels,
+                    datasets: [{
+                        label: laborDatasetLabel,
+                        data: [50, 5],
+                        backgroundColor: ['rgba(203, 213, 225, 0.8)', 'rgba(34, 197, 94, 0.8)'],
+                        borderRadius: 8,
+                        barThickness: 40
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { grid: { display: false } }
+                    }
                 }
-            }
-        });
+            });
+        })();
 
         // 2. 精度比較グラフ
         const ctxAcc = document.getElementById('accuracyChart').getContext('2d');
-        new Chart(ctxAcc, {
-            type: 'line',
-            data: {
-                labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-                datasets: [
-                    {
-                        label: '理論値 (Target)',
-                        data: Array(10).fill(12.38),
-                        borderColor: 'rgba(59, 130, 246, 0.5)',
-                        borderDash: [5, 5],
-                        borderWidth: 2,
-                        pointRadius: 0
-                    },
-                    {
-                        label: '手曲げ加工 (Manual)',
-                        data: [12.1, 12.6, 12.2, 12.8, 12.0, 12.5, 12.3, 12.9, 12.1, 12.7],
-                        borderColor: 'rgba(239, 68, 68, 0.4)',
-                        borderWidth: 1,
-                        tension: 0.4,
-                        pointRadius: 0
-                    },
-                    {
-                        label: 'API生成 (Python)',
-                        data: [12.38, 12.39, 12.38, 12.37, 12.38, 12.39, 12.38, 12.38, 12.39, 12.38],
-                        borderColor: 'rgba(34, 197, 94, 1)',
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.2,
-                        fill: true
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: { 
-                    y: { 
-                        min: 11.5, max: 13.0,
-                        title: { display: true, text: 'ピッチ (mm)' },
-                        grid: { borderDash: [2, 2] }
-                    },
-                    x: { grid: { display: false } }
+        (function(){
+            const theoryLabel = document.getElementById('accuracy-theory-label')?.innerText || '理論値 (Target)';
+            const manualLabel = document.getElementById('accuracy-manual-label')?.innerText || '手曲げ加工 (Manual)';
+            const apiLabel = document.getElementById('accuracy-api-label')?.innerText || 'API生成 (Python)';
+            const yTitle = document.getElementById('accuracy-y-title')?.innerText || 'ピッチ (mm)';
+
+            new Chart(ctxAcc, {
+                type: 'line',
+                data: {
+                    labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+                    datasets: [
+                        {
+                            label: theoryLabel,
+                            data: Array(10).fill(12.38),
+                            borderColor: 'rgba(59, 130, 246, 0.5)',
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            pointRadius: 0
+                        },
+                        {
+                            label: manualLabel,
+                            data: [12.1, 12.6, 12.2, 12.8, 12.0, 12.5, 12.3, 12.9, 12.1, 12.7],
+                            borderColor: 'rgba(239, 68, 68, 0.4)',
+                            borderWidth: 1,
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: apiLabel,
+                            data: [12.38, 12.39, 12.38, 12.37, 12.38, 12.39, 12.38, 12.38, 12.39, 12.38],
+                            borderColor: 'rgba(34, 197, 94, 1)',
+                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.2,
+                            fill: true
+                        }
+                    ]
                 },
-                plugins: {
-                    legend: { position: 'bottom' }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { 
+                        y: { 
+                            min: 11.5, max: 13.0,
+                            title: { display: true, text: yTitle },
+                            grid: { borderDash: [2, 2] }
+                        },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
                 }
-            }
-        });
+            });
+        })();
     </script>
 
     

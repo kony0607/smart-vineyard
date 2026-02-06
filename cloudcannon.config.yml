@@ -25,6 +25,22 @@ collections_config:
         cascade: true
       $.footer.copy:
         cascade: true
+      $.team.author:
+        cascade: true
+      $.story.image:
+        cascade: true
+      $.data.labor_labels:
+        cascade: true
+      $.data.labor_dataset_label:
+        cascade: true
+      $.data.accuracy_y_title:
+        cascade: true
+      $.data.accuracy_theory_label:
+        cascade: true
+      $.data.accuracy_manual_label:
+        cascade: true
+      $.data.accuracy_api_label:
+        cascade: true
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
