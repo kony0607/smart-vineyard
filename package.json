@@ -1,0 +1,25 @@
+{
+  "name": "smart-vineyard",
+  "version": "1.0.0",
+  "description": "岩手県大迫町のワイン産業を守るためのスマート雨よけシステムの開発記録。",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx @tailwindcss/cli -i ./src/input.css -o ./dist/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kony0607/smart-vineyard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kony0607/smart-vineyard/issues"
+  },
+  "homepage": "https://github.com/kony0607/smart-vineyard#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "tailwindcss": "^4.1.18"
+  }
+}

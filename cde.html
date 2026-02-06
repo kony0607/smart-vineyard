@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIYU KONDO | System Architecture Profile</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+        :root {
+            --color-primary: #1E40AF; /* Royal Blue */
+            --color-accent: #EA580C;  /* Signal Orange */
+            --bg-neutral: #F1F5F9;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-neutral);
+            color: #0F172A;
+            scroll-behavior: smooth;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            max-height: 400px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 1);
+            border-radius: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--color-accent);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .step-active {
+            border-left: 4px solid var(--color-accent);
+            background: linear-gradient(to right, rgba(234, 88, 12, 0.05), transparent);
+        }
+
+        /* Prevent layout shift */
+        canvas {
+            max-width: 100% !important;
+        }
+    </style>
+</head>
+<!-- Chosen Palette: Logistics & Engineering (Blue, Orange, Slate) -->
+<!-- Application Structure Plan: 
+     1. Hero Section: 氏名のアイデンティティと「完遂」のタグライン。
+     2. Core Values: 3つの柱（構造化・当事者意識・執着心）。
+     3. Research Deep Dive: 農業自動化研究の技術的課題解決プロセスをインタラクティブに解説。
+     4. Competency Dashboard: スキルセットと成長曲線のデータ可視化。
+     5. Career Roadmap: Hacobuでの具体的アクションプラン。
+     Rationale: 定性的な「想い」から始まり、定量的な「技術力」を示し、最後に具体的な「貢献可能性」へ繋げることで、採用側の納得感を最大化する。 -->
+<!-- Visualization & Content Choices:
+     - Radar Chart (Chart.js): 6つのコンピテンシーを比較。
+     - Line Chart (Chart.js): 過去・現在・未来の技術深度の変遷。
+     - HTML/CSS Interaction: デバッグプロセスの段階的表示。
+     - Confirming NO SVG/Mermaid. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<body class="overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <span class="font-extrabold text-xl tracking-tighter text-blue-900">MIYU.KONDO <span class="text-orange-600">_SYSTEM</span></span>
+            <div class="hidden md:flex gap-8 text-sm font-bold uppercase tracking-wider">
+                <a href="#about" class="nav-link text-slate-600 hover:text-orange-600">Core</a>
+                <a href="#research" class="nav-link text-slate-600 hover:text-orange-600">Research</a>
+                <a href="#data" class="nav-link text-slate-600 hover:text-orange-600">Data</a>
+                <a href="#roadmap" class="nav-link text-slate-600 hover:text-orange-600">Roadmap</a>
+            </div>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-orange-600 transition-colors">CONTACT ASYNC</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="about" class="pt-32 pb-20 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <div class="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full mb-4">2026 NEW GRADUATE CANDIDATE</div>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 leading-tight mb-6">
+                    カオスを<br><span class="text-blue-600">構造化</span>し、<br><span class="text-orange-600">仕組み</span>で完遂する。
+                </h1>
+                <p class="text-xl text-slate-600 leading-relaxed mb-8 max-w-lg">
+                    既存のツールやルールへの「違和感」を、Pythonとロジックで解決する。
+                    農業自動化研究で培った物理的制約への理解と、API自作によるハック精神を武器に、物流の「運ぶ」を最適化します。
+                </p>
+                <div class="flex flex-wrap gap-4 text-sm font-bold">
+                    <div class="flex items-center gap-2 bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100">
+                        <span class="text-blue-600">#</span> Python / API Development
+                    </div>
+                    <div class="flex items-center gap-2 bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100">
+                        <span class="text-orange-600">#</span> CAD / Structural Realism
+                    </div>
+                    <div class="flex items-center gap-2 bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100">
+                        <span class="text-slate-400">#</span> Ownership-Driven
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute -top-10 -left-10 w-32 h-32 bg-orange-100 rounded-full blur-3xl opacity-50"></div>
+                <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
+                <div class="glass-card p-8 border-l-8 border-blue-600">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">Miyu's Identity System</h3>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 font-bold shrink-0">01</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">執着心 (Obsession)</h4>
+                                <p class="text-sm text-slate-500">バグや非効率をそのままにできない。解決するまで思考を止めない「完遂」の精神。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center text-orange-600 font-bold shrink-0">02</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">構造的リアリズム</h4>
+                                <p class="text-sm text-slate-500">感情論ではなく因果関係で捉える。物理現象とソフトウェアを一つの系として設計。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-slate-50 rounded-lg flex items-center justify-center text-slate-600 font-bold shrink-0">03</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">当事者意識</h4>
+                                <p class="text-sm text-slate-500">「誰かがやる」ではなく「私がやる」。自分の領域を定めず、最適化に全責任を持つ。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Deep Dive Section -->
+    <section id="research" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="text-3xl md:text-5xl font-extrabold mb-4">Research & Technical Hack</h2>
+                <p class="text-slate-400 max-w-2xl">
+                    農業自動化に向けた、CAD API自作によるハック。
+                    「既存ツールの限界」を技術で突破したプロセスを紹介します。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <!-- Interactive Stepper -->
+                <div class="lg:col-span-5 space-y-4" id="step-container">
+                    <div class="p-6 rounded-2xl cursor-pointer transition-all step-active" onclick="showResearchStep(0)">
+                        <h4 class="font-bold text-orange-400 mb-2">Phase 1: 違和感の発見</h4>
+                        <p class="text-sm text-slate-300">CADソフトのGUI操作による「再現性」と「効率」の限界。手作業の泥臭さに構造的欠陥を感じる。</p>
+                    </div>
+                    <div class="p-6 rounded-2xl cursor-pointer transition-all hover:bg-white/5" onclick="showResearchStep(1)">
+                        <h4 class="font-bold text-white mb-2">Phase 2: 独自APIの実装</h4>
+                        <p class="text-sm text-slate-400">GUIを捨て、PythonでCADを直接制御。数千通りの設計変数を数秒で処理する「仕組み」を構築。</p>
+                    </div>
+                    <div class="p-6 rounded-2xl cursor-pointer transition-all hover:bg-white/5" onclick="showResearchStep(2)">
+                        <h4 class="font-bold text-white mb-2">Phase 3: 完遂と成果</h4>
+                        <p class="text-sm text-slate-400">1週間かかったシミュレーション準備を5分に短縮。物理現象の最適解をエンジニアリングで導き出す。</p>
+                    </div>
+                </div>
+
+                <!-- Display Box -->
+                <div class="lg:col-span-7 bg-slate-800 rounded-3xl p-8 border border-slate-700 flex flex-col justify-center min-h-[400px]">
+                    <div id="step-display">
+                        <div class="mb-6 flex items-center gap-4">
+                            <span class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center font-bold">!</span>
+                            <h3 class="text-2xl font-bold">The Problem: 手作業の限界</h3>
+                        </div>
+                        <div class="space-y-4 text-slate-300 leading-relaxed">
+                            <p>農業現場の自動化には、複雑な支柱構造の設計が必要です。しかし、標準のCADツールでは微調整のたびに再描画が発生し、人間が「バグ」のような単純作業を繰り返していました。</p>
+                            <div class="p-4 bg-slate-900/50 rounded-xl border border-red-500/20">
+                                <span class="text-red-400 font-bold text-xs uppercase">Observation:</span>
+                                <p class="text-sm italic">「ツールに使われている状態」への強い反発心。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Visualization Section -->
+    <section id="data" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4">Competency Dashboard</h2>
+                <p class="text-slate-600">定量データで見る、近藤未悠の特性と成長軌道。</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Competency Radar -->
+                <div class="glass-card p-8">
+                    <h3 class="text-xl font-bold text-slate-800 mb-6 flex justify-between items-center">
+                        スキル特性 
+                        <span class="text-xs font-normal text-slate-400">※自己・他者評価の統合データ</span>
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="competencyChart"></canvas>
+                    </div>
+                    <div class="mt-8 grid grid-cols-2 gap-4">
+                        <div class="p-3 bg-blue-50 rounded-xl">
+                            <span class="text-xs text-blue-600 font-bold">MAX: 構造化能力</span>
+                            <p class="text-xs text-slate-500 mt-1">因果関係の特定とモデル化において最高評価。</p>
+                        </div>
+                        <div class="p-3 bg-orange-50 rounded-xl">
+                            <span class="text-xs text-orange-600 font-bold">MAX: 執着心</span>
+                            <p class="text-xs text-slate-500 mt-1">「完遂」までやり抜く突破力が強み。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Growth Line Chart -->
+                <div class="glass-card p-8">
+                    <h3 class="text-xl font-bold text-slate-800 mb-6">技術深度の変遷と将来予測</h3>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                    <div class="mt-8 flex gap-4">
+                        <div class="w-2 h-full bg-blue-600 rounded-full"></div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            <strong>2024年以前:</strong> 個別の課題を自力でハックする「個の技術者」。<br>
+                            <strong>Hacobu入社後:</strong> 現場の課題を社会共通のインフラへと昇華させる「仕組みのエンジニア」への進化を計画。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Roadmap Section -->
+    <section id="roadmap" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4">Hacobu Strategy</h2>
+                    <p class="text-slate-600 max-w-xl text-lg">
+                        私の「完遂」の情熱を、物流DXのどのポイントに投下するか。
+                    </p>
+                </div>
+                <div class="text-right">
+                    <div class="text-5xl font-black text-slate-100 mb-[-1.5rem] select-none">ROADMAP</div>
+                    <div class="relative z-10 text-orange-600 font-bold">ACTION PLAN 2026-2029</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Year 1 -->
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                    <div class="relative glass-card p-8 h-full flex flex-col">
+                        <span class="text-4xl font-black text-blue-100 mb-4">01</span>
+                        <h4 class="text-xl font-bold text-slate-800 mb-4">吸収とマイクロハック</h4>
+                        <ul class="text-sm text-slate-600 space-y-3 mb-8 flex-grow">
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-600 mt-1">✔</span>
+                                MOVOのコードベースを完璧に構造解釈。
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-600 mt-1">✔</span>
+                                開発現場やCSチームの「小さな違和感」を勝手に改善ツール化して提供。
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-600 mt-1">✔</span>
+                                「近藤に投げれば必ず形になる」という信頼の確立。
+                            </li>
+                        </ul>
+                        <div class="pt-4 border-t border-slate-100">
+                            <span class="text-xs font-bold text-slate-400">KPI: 開発リードタイムの20%削減</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Year 2-3 -->
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-orange-600 to-red-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                    <div class="relative glass-card p-8 h-full flex flex-col">
+                        <span class="text-4xl font-black text-orange-100 mb-4">02</span>
+                        <h4 class="text-xl font-bold text-slate-800 mb-4">構造的な機能リード</h4>
+                        <ul class="text-sm text-slate-600 space-y-3 mb-8 flex-grow">
+                            <li class="flex items-start gap-2">
+                                <span class="text-orange-600 mt-1">✔</span>
+                                物流現場の非効率な商習慣を、プロダクトの仕様に落とし込んで破壊する。
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-orange-600 mt-1">✔</span>
+                                他のエンジニアが迷わない、堅牢でクリーンなアーキテクチャ設計。
+                            </li>
+                        </ul>
+                        <div class="pt-4 border-t border-slate-100">
+                            <span class="text-xs font-bold text-slate-400">KPI: 新機能のバグ発生率極小化</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Future -->
+                <div class="relative group">
+                    <div class="relative glass-card p-8 h-full bg-slate-900 text-white flex flex-col">
+                        <span class="text-4xl font-black text-slate-800 mb-4">03</span>
+                        <h4 class="text-xl font-bold mb-4">社会インフラとしての完遂</h4>
+                        <ul class="text-sm text-slate-400 space-y-3 mb-8 flex-grow">
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-500 mt-1">✔</span>
+                                「運ぶ」におけるあらゆるデータが、予測通りに動く世界を実現。
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-500 mt-1">✔</span>
+                                Hacobuというシステムが、日本の物流の「標準OS」となるよう設計。
+                            </li>
+                        </ul>
+                        <div class="pt-4 border-t border-slate-700">
+                            <span class="text-xs font-bold text-slate-500">MISSION: 予測可能な物流社会</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-500 py-12 px-6 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex flex-col items-center md:items-start">
+                <span class="font-extrabold text-white tracking-tighter text-xl">MIYU.KONDO <span class="text-orange-600">_INFOGRAPHIC</span></span>
+                <p class="text-xs mt-2">Built with Strategic Logic & Tech Passion for Hacobu.</p>
+            </div>
+            <div class="flex gap-6 text-xs font-bold uppercase tracking-widest">
+                <a href="#" class="hover:text-white">Profile</a>
+                <a href="#" class="hover:text-white">Github</a>
+                <a href="#" class="hover:text-white">Vision</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Functions -->
+    <script>
+        // Research Steps Data
+        const steps = [
+            {
+                title: "The Problem: 手作業の限界",
+                icon: "!",
+                color: "bg-red-600",
+                text: "農業現場の自動化には、複雑な支柱構造の設計が必要です。しかし、標準のCADツールでは微調整のたびに再描画が発生し、人間が「バグ」のような単純作業を繰り返していました。",
+                observation: "「ツールに使われている状態」への強い反発心。"
+            },
+            {
+                title: "The Logic: 仕組みの構築",
+                icon: "{}",
+                color: "bg-blue-600",
+                text: "市販ソフトの限界を認め、PythonでCAD APIを自作。設計変数（長さ、角度、強度）を入力するだけで、瞬時に3Dモデルと構造計算を完了させるシステムをゼロから構築しました。",
+                observation: "手段は問わない。目的のためにツールを「ハック」する。"
+            },
+            {
+                title: "The Result: 予測可能な成果",
+                icon: "✓",
+                color: "bg-emerald-600",
+                text: "人手で行っていた設計時間を90%以上削減。空いた時間を物理現象の解析に充てることができ、研究自体の質を大幅に向上させました。これは「社会の不合理」を解決する縮図です。",
+                observation: "仕組み化によって、人間をより高度な思考へ解放する。"
+            }
+        ];
+
+        function showResearchStep(index) {
+            // Update UI
+            const container = document.getElementById('step-container');
+            const displays = container.children;
+            for(let i=0; i<displays.length; i++) {
+                if(i === index) displays[i].classList.add('step-active', 'bg-white/5');
+                else displays[i].classList.remove('step-active', 'bg-white/5');
+            }
+
+            // Update Text
+            const display = document.getElementById('step-display');
+            display.style.opacity = '0';
+            setTimeout(() => {
+                display.innerHTML = `
+                    <div class="mb-6 flex items-center gap-4">
+                        <span class="w-12 h-12 ${steps[index].color} rounded-full flex items-center justify-center font-bold">${steps[index].icon}</span>
+                        <h3 class="text-2xl font-bold">${steps[index].title}</h3>
+                    </div>
+                    <div class="space-y-4 text-slate-300 leading-relaxed">
+                        <p>${steps[index].text}</p>
+                        <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-700">
+                            <span class="text-blue-400 font-bold text-xs uppercase">Insight:</span>
+                            <p class="text-sm italic">${steps[index].observation}</p>
+                        </div>
+                    </div>
+                `;
+                display.style.opacity = '1';
+            }, 200);
+        }
+
+        // Charts Initialization
+        window.onload = function() {
+            // Competency Radar
+            const ctxRadar = document.getElementById('competencyChart').getContext('2d');
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ['構造化能力', '執着心・完遂力', '当事者意識', '技術的探求心', '論理的思考', '柔軟性'],
+                    datasets: [{
+                        label: '能力値',
+                        data: [95, 98, 92, 85, 90, 75],
+                        backgroundColor: 'rgba(30, 64, 175, 0.2)',
+                        borderColor: '#1E40AF',
+                        pointBackgroundColor: '#1E40AF',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { display: false },
+                            grid: { color: '#E2E8F0' },
+                            pointLabels: { font: { family: 'Noto Sans JP', weight: 'bold', size: 10 } }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Growth Line
+            const ctxLine = document.getElementById('growthChart').getContext('2d');
+            new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: ['2022', '2023', '2024(研究)', '2025', '2026(Hacobu入社)', '2028(予測)'],
+                    datasets: [{
+                        label: '技術・ビジネスの統合深度',
+                        data: [30, 45, 80, 85, 92, 100],
+                        borderColor: '#EA580C',
+                        backgroundColor: 'rgba(234, 88, 12, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 110, ticks: { display: false }, grid: { display: false } },
+                        x: { grid: { display: false }, ticks: { font: { family: 'Inter', weight: 'bold' } } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        };
+    </script>
+</body>
+</html>

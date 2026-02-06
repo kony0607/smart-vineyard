@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miyu Kondo | Strategic Profile Infographic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+        :root {
+            --color-primary: #2563EB; /* Royal Blue */
+            --color-secondary: #F97316; /* Signal Orange */
+            --color-bg: #F8FAFC;
+            --color-card: #FFFFFF;
+            --color-text: #1E293B;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans JP', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+
+        /* Responsive Chart Containers */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+
+        /* Card Styling (Material Design inspired) */
+        .card {
+            background-color: var(--color-card);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Interactive Elements */
+        .btn-toggle {
+            transition: all 0.2s;
+        }
+        .btn-toggle:active { transform: scale(0.95); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .timeline-line {
+            position: absolute;
+            left: 1.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #E2E8F0;
+        }
+    </style>
+    <!-- Chosen Palette: "Logistics Tech" (Royal Blue & Signal Orange) -->
+    <!-- Application Structure Plan:
+         1. Header: Executive Summary & Core Identity (The "Manifesto").
+         2. Data Grid:
+            - Left: Quantitative Analysis (Radar Chart of Skills).
+            - Right: Qualitative Deep Dive (Process Flow & Motivation).
+         3. Evolution: Chronological Line Chart showing the shift from "Tinkering" to "Engineering".
+         4. Impact: Strategic target mapping (Why Hacobu?). 
+         Rationale: This structure moves from "Who I am" (Static) to "How I grew" (Dynamic) to "What I will do" (Future). -->
+    <!-- Visualization & Content Choices:
+         1. Radar Chart -> Goal: Compare -> Competency balance. -> Interaction: Tooltips. -> Justification: Chart.js is perfect for multi-axial skill mapping.
+         2. Line Chart -> Goal: Change -> Growth trajectory over time. -> Interaction: Hover for key events. -> Justification: Shows the progression of technical depth.
+         3. Process Diagram (HTML) -> Goal: Organize -> Debugging philosophy. -> Interaction: None (Static flow). -> Justification: Structured HTML for clear logic flow.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased">
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- HEADER: The Manifesto -->
+        <header class="mb-12 bg-white rounded-3xl p-8 shadow-sm border-l-8 border-blue-600">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-widest">Candidate Profile</span>
+                        <span class="text-slate-400 text-xs font-bold">2026 NEW GRAD</span>
+                    </div>
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight">
+                        MIYU KONDO
+                    </h1>
+                    <p class="text-xl md:text-2xl text-slate-600 font-medium mt-2">
+                        Structural Realist & <span class="text-blue-600">Logistics Hacker</span>
+                    </p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-slate-500 font-bold uppercase tracking-wider mb-1">Core Mission</p>
+                    <p class="text-lg font-bold text-slate-800">
+                        "現場の不合理を、<br>仕組みで<span class="text-orange-500">完遂</span>する。"
+                    </p>
+                </div>
+            </div>
+            <hr class="my-6 border-slate-100">
+            <p class="text-slate-600 leading-relaxed max-w-4xl">
+                本インフォグラフィックは、近藤未悠のエンジニアとしての特性を可視化したものです。
+                「既存ツールへの違和感」を起点に、PythonによるAPI自作で物理的課題（CAD設計）を解決した経験、
+                そしてHacobuで実現したい「予測可能な物流インフラ」へのビジョンをデータで紐解きます。
+            </p>
+        </header>
+
+        <!-- SECTION 1: Capability Analysis -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+            
+            <!-- Left: Radar Chart (Skills) -->
+            <div class="lg:col-span-5 card">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-800">エンジニア・スペック</h3>
+                    <i class="fa-solid fa-chart-radar text-blue-500 text-xl"></i>
+                </div>
+                <p class="text-sm text-slate-500 mb-4">
+                    技術力とマインドセットのバランス。特に「構造化能力」と「当事者意識」が突出しています。
+                </p>
+                <div class="chart-container">
+                    <canvas id="skillRadarChart"></canvas>
+                </div>
+                <div class="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                    <h4 class="text-blue-800 text-xs font-bold uppercase mb-2">Analysis Insight</h4>
+                    <p class="text-xs text-blue-700 leading-relaxed">
+                        <strong>構造化 (95):</strong> 複雑な事象を因果関係に分解する力。<br>
+                        <strong>実装力 (80):</strong> Python/API開発の実績に裏打ちされた遂行力。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right: The Debugging Philosophy (Process Flow) -->
+            <div class="lg:col-span-7 card bg-slate-900 text-white border-none">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-xl font-bold text-white">思考アルゴリズム：デバッグの流儀</h3>
+                    <i class="fa-solid fa-microchip text-orange-500 text-xl"></i>
+                </div>
+                <p class="text-slate-400 text-sm mb-8">
+                    「失敗」とはバグであり、バグには必ず原因があります。私は感情論を排し、以下のフローでカオスを鎮圧します。
+                </p>
+
+                <!-- Process Steps (HTML/CSS Implementation) -->
+                <div class="space-y-6 relative">
+                    <!-- Step 1 -->
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300 border border-slate-600">01</div>
+                        <div class="flex-grow pt-1">
+                            <h4 class="font-bold text-orange-400 text-lg">違和感の検知 (Detection)</h4>
+                            <p class="text-sm text-slate-400 mt-1">「なんとなく使いにくい」「なぜか手戻りが多い」。現場の小さなノイズを構造的欠陥のサインとして拾い上げる。</p>
+                        </div>
+                    </div>
+                    <!-- Connector -->
+                    <div class="ml-5 w-0.5 h-6 bg-slate-700"></div>
+                    
+                    <!-- Step 2 -->
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/30">02</div>
+                        <div class="flex-grow pt-1">
+                            <h4 class="font-bold text-white text-lg">独自のハック (Intervention)</h4>
+                            <p class="text-sm text-slate-300 mt-1">既存ツール（CAD等）の限界を受け入れない。PythonでAPIを自作し、自分のロジックでツールを拡張・支配する。</p>
+                        </div>
+                    </div>
+                    <!-- Connector -->
+                    <div class="ml-5 w-0.5 h-6 bg-slate-700"></div>
+
+                    <!-- Step 3 -->
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300 border border-slate-600">03</div>
+                        <div class="flex-grow pt-1">
+                            <h4 class="font-bold text-emerald-400 text-lg">仕組み化と完遂 (Infrastructure)</h4>
+                            <p class="text-sm text-slate-400 mt-1">一時的な解決で終わらせない。誰がやっても同じ結果が出る「予測可能なインフラ」として定着させる。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Growth Trajectory -->
+        <div class="card mb-12">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800">エンジニアとしての進化論</h3>
+                    <p class="text-sm text-slate-500 mt-1">「自己流の効率化」から「技術による社会実装」への変遷。</p>
+                </div>
+                <div class="flex gap-2 mt-4 md:mt-0">
+                    <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">● 技術深度</span>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="growthLineChart"></canvas>
+            </div>
+            <!-- Contextual Notes for Chart -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-center">
+                <div class="p-3 bg-slate-50 rounded-lg">
+                    <div class="text-xs font-bold text-slate-400 uppercase">Phase 1: Origins</div>
+                    <div class="font-bold text-slate-800">中高時代</div>
+                    <p class="text-xs text-slate-500 mt-1">既存ルールへの疑問と、独自の攻略法探索。</p>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                    <div class="text-xs font-bold text-blue-400 uppercase">Phase 2: Awakening</div>
+                    <div class="font-bold text-blue-800">大学・研究</div>
+                    <p class="text-xs text-blue-600 mt-1">CAD API自作による「物理×情報」のハック成功体験。</p>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-lg">
+                    <div class="text-xs font-bold text-slate-400 uppercase">Phase 3: Mission</div>
+                    <div class="font-bold text-slate-800">Hacobu入社後</div>
+                    <p class="text-xs text-slate-500 mt-1">個人のハックを社会インフラ（物流）の解決へ。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Strategic Target (Why Hacobu) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            
+            <!-- Value Proposition -->
+            <div class="card bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
+                <h3 class="text-2xl font-bold mb-6">なぜ、物流DXなのか。</h3>
+                <p class="text-blue-100 leading-relaxed mb-6">
+                    私の研究（農業自動化）と物流には共通点があります。それは<strong>「現場のアナログな物理制約」</strong>です。<br>
+                    画面の中だけで完結しない、雨や泥、人の慣習が絡む複雑なカオス。ここを整理することにこそ、エンジニアリングの最大の価値（快感）があると確信しています。
+                </p>
+                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-bullseye text-orange-400"></i>
+                        <span class="font-bold">Target Match</span>
+                    </div>
+                    <p class="text-sm text-blue-50">
+                        Hacobuの「運ぶを最適化する」は、私が目指す「社会のバグ取り」そのものです。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Future Contributions -->
+            <div class="card">
+                <h3 class="text-xl font-bold text-slate-800 mb-6">入社後の貢献ロードマップ</h3>
+                <div class="space-y-4">
+                    <div class="flex gap-4 p-4 hover:bg-slate-50 rounded-xl transition-colors">
+                        <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">1</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">現場理解と小規模ハック</h4>
+                            <p class="text-sm text-slate-600 mt-1">
+                                まずはコードと現場のギャップを埋める。使いにくい社内ツールがあれば、API自作の経験を活かして勝手に改善します。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 p-4 hover:bg-slate-50 rounded-xl transition-colors">
+                        <div class="flex-shrink-0 w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">3</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">構造的な機能実装リード</h4>
+                            <p class="text-sm text-slate-600 mt-1">
+                                3年後には、複雑な物流要件をシンプルなアーキテクチャに落とし込むテックリードへ。0.1mmの精度で仕様を詰め切ります。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-slate-400 text-sm py-8 border-t border-slate-200">
+            <p>&copy; 2026 Miyu Kondo | Generated for Hacobu Interview Context</p>
+            <p class="text-xs mt-2">No SVG Graphics Used. Rendered with Chart.js & Tailwind CSS.</p>
+        </footer>
+
+    </div>
+
+    <!-- Chart Logic -->
+    <script>
+        // --- 1. Radar Chart (Skills) ---
+        const ctxRadar = document.getElementById('skillRadarChart').getContext('2d');
+        
+        // Handling long labels by splitting strings (16 char limit logic applied manually here for clarity)
+        const radarLabels = [
+            ['構造化能力', '(Logic)'], 
+            ['当事者意識', '(Ownership)'], 
+            ['技術実装力', '(Implementation)'], 
+            ['現場解像度', '(Realism)'], 
+            ['レジリエンス', '(Recovery)'], 
+            ['感情言語化', '(Verbalization)']
+        ];
+
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: radarLabels,
+                datasets: [{
+                    label: 'Current Capability',
+                    data: [95, 95, 80, 85, 90, 55],
+                    backgroundColor: 'rgba(37, 99, 235, 0.2)', // Royal Blue
+                    borderColor: '#2563EB',
+                    pointBackgroundColor: '#2563EB',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#2563EB',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(0,0,0,0.1)' },
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        pointLabels: {
+                            font: { size: 11, family: 'Noto Sans JP', weight: 'bold' },
+                            color: '#64748B'
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        ticks: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                const label = context[0].label;
+                                return Array.isArray(label) ? label.join(' ') : label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- 2. Line Chart (Growth) ---
+        const ctxLine = document.getElementById('growthLineChart').getContext('2d');
+        
+        // Gradient for line chart
+        const gradient = ctxLine.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(249, 115, 22, 0.4)'); // Orange
+        gradient.addColorStop(1, 'rgba(249, 115, 22, 0)');
+
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['中学・高校', '大学初期', '研究(API自作)', '現在', 'Hacobu(未来)'],
+                datasets: [{
+                    label: '課題解決深度',
+                    data: [40, 60, 90, 95, 100],
+                    borderColor: '#F97316', // Orange
+                    backgroundColor: gradient,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#F97316',
+                    pointRadius: 6,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        display: false,
+                        min: 0,
+                        max: 110
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { size: 11, family: 'Noto Sans JP', weight: 'bold' },
+                            color: '#64748B'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return context[0].label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
