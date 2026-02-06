@@ -1,4 +1,13 @@
 source: .
-output_dir: _site # または空欄
+collections_config:
+  pages:
+    path: ''
+    icon: wysiwyg
+    disable_url: false
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+timezone: Etc/UTC
+output_dir: _site
 common_config:
   name: My Portfolio
