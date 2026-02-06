@@ -7,6 +7,24 @@ collections_config:
     _inputs:
       $.meta.title:
         cascade: true
+      $.progress.summary:
+        cascade: true
+      $.architecture.summary:
+        cascade: true
+      $.mechanism.detail:
+        cascade: true
+      $.data.analysis_intro:
+        cascade: true
+      $.data.labor_note:
+        cascade: true
+      $.data.accuracy_note:
+        cascade: true
+      $.future.roadmap:
+        cascade: true
+      $.future.learnings:
+        cascade: true
+      $.footer.copy:
+        cascade: true
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
