@@ -1,9 +1,26 @@
+---
+meta:
+  title: "Smart Vineyard Project | ぶどう園自動化への挑戦"
+nav:
+  brand: "Smart Vineyard"
+hero:
+  badge: "2025-2026 Engineering Portfolio"
+  heading: "伝統と技術を繋ぐ\nスマート雨よけシステム"
+  sub: "岩手県大迫町のワイン産業を守るため。\n機構設計(CAD) × 回路制御(Raspi) × クラウド開発(React)"
+team:
+  author: "近藤 未悠"
+  supervisor: "小山 猛"
+  cooperation: "(株)エーデルワイン"
+story:
+  lead: "岩手県大迫町は、日本有数のワイン用ブドウ産地として知られています。しかし、近年の気候変動による不定期な豪雨は、ブドウに深刻な病気（ベト病など）をもたらし、その品質を脅かしています。"
+---
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Vineyard Project | ぶどう園自動化への挑戦</title>
+    <title data-cloudcannon-field="meta.title">Smart Vineyard Project | ぶどう園自動化への挑戦</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -74,7 +91,7 @@
                     <div class="w-8 h-8 bg-brand-main rounded-lg flex items-center justify-center text-white group-hover:rotate-12 transition-transform">
                         <i class="fas fa-grapes"></i>
                     </div>
-                    <span class="font-bold text-brand-dark tracking-tight text-lg">Smart Vineyard</span>
+                    <span class="font-bold text-brand-dark tracking-tight text-lg" data-cloudcannon-field="nav.brand">Smart Vineyard</span>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#story" class="text-gray-600 hover:text-brand-main text-sm font-medium transition-colors">背景と目的</a>
@@ -99,15 +116,13 @@
         <div class="relative z-10 text-center max-w-5xl px-4 animate-fade-in-up">
             <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-brand-accent text-xs font-mono tracking-widest uppercase">
                 <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
-                2025-2026 Engineering Portfolio
-            </div>
-            
-            <h1 class="text-4xl md:text-7xl font-black mb-8 leading-tight tracking-tight drop-shadow-2xl">
+                <span data-cloudcannon-field="hero.badge">2025-2026 Engineering Portfolio</span>
+            <h1 class="text-4xl md:text-7xl font-black mb-8 leading-tight tracking-tight drop-shadow-2xl" data-cloudcannon-field="hero.heading|markdown">
                 伝統と技術を繋ぐ<br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-lime-400 to-emerald-400">スマート雨よけ</span>システム
             </h1>
             
-            <p class="text-lg md:text-2xl text-gray-300 mb-12 font-light max-w-3xl mx-auto leading-relaxed">
+            <p class="text-lg md:text-2xl text-gray-300 mb-12 font-light max-w-3xl mx-auto leading-relaxed" data-cloudcannon-field="hero.sub|markdown">
                 岩手県大迫町のワイン産業を守るため。<br>
                 <span class="font-medium text-white">機構設計(CAD)</span> × <span class="font-medium text-white">回路制御(Raspi)</span> × <span class="font-medium text-white">クラウド開発(React)</span><br>
                 3つの領域を独力で統合したフルスタック・エンジニアリングの記録。
@@ -118,21 +133,21 @@
                     <div class="w-8 h-8 rounded-full bg-brand-dark text-white flex items-center justify-center"><i class="fas fa-user"></i></div>
                     <div class="text-left">
                         <div class="text-xs text-gray-500 uppercase">開発・実装（単独）</div>
-                        <div>近藤 未悠</div>
+                        <div data-cloudcannon-field="team.author">近藤 未悠</div>
                     </div>
                 </div>
                 <div class="glass-panel text-brand-dark px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-white transition-colors cursor-default">
                     <div class="w-8 h-8 rounded-full bg-brand-dark text-white flex items-center justify-center"><i class="fas fa-chalkboard-teacher"></i></div>
                     <div class="text-left">
                         <div class="text-xs text-gray-500 uppercase">監督（指導教員）</div>
-                        <div>小山 猛</div>
+                        <div data-cloudcannon-field="team.supervisor">小山 猛</div>
                     </div>
                 </div>
                 <div class="bg-brand-accent/10 border border-brand-accent/30 text-brand-accent px-6 py-4 rounded-xl flex items-center gap-3">
                     <i class="fas fa-handshake text-xl"></i>
                     <div class="text-left">
                         <div class="text-xs opacity-80 uppercase">In Cooperation With</div>
-                        <div>(株)エーデルワイン</div>
+                        <div data-cloudcannon-field="team.cooperation">(株)エーデルワイン</div>
                     </div>
                 </div>
             </div>
@@ -152,7 +167,7 @@
                     なぜ、「雨」との戦いに<br>技術が必要なのか？
                 </h2>
                 <div class="space-y-6 text-gray-600 leading-relaxed">
-                    <p>
+                    <p data-cloudcannon-field="story.lead|markdown">
                         <strong>岩手県大迫町</strong>は、日本有数のワイン用ブドウ産地として知られています。しかし、近年の気候変動による不定期な豪雨は、ブドウに深刻な病気（ベト病など）をもたらし、その品質を脅かしています。
                     </p>
                     <div class="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-lg">
