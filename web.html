@@ -37,12 +37,9 @@ mechanism:
     そこで私たちは、CADソフト（Fusion
     360）のAPIを活用し、"Pythonスクリプトによるパラメトリック設計"を行いました。これにより、パーツを自動生成することに成功し、精度と量産性を両立しました。
 data:
-  analysis_intro: 「作った」だけで終わらない。エンジニアリングとしての定量評価。
-  labor_note: >-
-    年間降雨日数を100日、1回の開閉・移動作業を30分として試算。システム導入により、年間約50時間の重労働を削減可能です。空いた時間はより付加価値の高い栽培管理に充てられます。
-  accuracy_note: >-
-    手作業での曲げ加工（赤線）と比較し、Python
-    APIで生成したラック（青線）は理論値(12.38mm)に対して極めて高い精度を維持。これによりモータの脱調を防ぎます。
+  analysis_intro: 計測データは現在準備中です。実運用・検証が完了し次第、定量的評価を掲載します。
+  labor_note: 計測準備中
+  accuracy_note: 計測準備中
   labor_labels:
     - 手動管理(現状)
     - システム導入後
@@ -178,7 +175,7 @@ footer:
                     <div class="w-8 h-8 rounded-full bg-brand-dark text-white flex items-center justify-center"><i class="fas fa-user"></i></div>
                     <div class="text-left">
                         <div class="text-xs text-gray-500 uppercase">開発・実装（単独）</div>
-                        <div data-cloudcannon-field="team.author|markdown" contenteditable="true" class="cursor-text">近藤</div>
+                        <div data-cloudcannon-field="team.author|markdown" contenteditable="true" class="cursor-text">近藤未悠 / 岩手大学 理工学部 システム創成工学科 知能メディア情報コース（地域創生特別プログラム・ものづくり系）</div>
                     </div>
                 </div>
                 <div class="glass-panel text-brand-dark px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-white transition-colors cursor-text">
@@ -225,6 +222,9 @@ footer:
                     <p>
                         それが、私たちが開発を始めた原点です。高価な既製品ではなく、<span data-key="raspi_mention">Raspberry Pi</span>と3Dプリンタを駆使した<strong>「安価で、修理しやすく、現場に寄り添った」</strong>独自の自動化ソリューションを目指しました。
                     </p>
+                    <p>
+                        個人としては、岩手大学におけるSmart Vineyardプロジェクトが学内での主要な成果です。小中学校で学級委員を務め（小学2年生頃から）、中学でパートリーダーを経験したことで「チームの文脈に基づく意思決定」の重要性を学びました。大学では大会運営のタスク管理表をExcelで作成しましたが形骸化した経験から、導入の持続可能性と属人化の課題を強く意識しています。
+                    </p>
                 </div>
             </div>
             
@@ -243,6 +243,28 @@ footer:
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Materials / Downloads -->
+    <section id="materials" class="py-12 px-4 max-w-6xl mx-auto">
+        <div class="text-center mb-6">
+            <h3 class="text-xl font-bold text-brand-dark">資料 / Downloads</h3>
+            <p class="text-sm text-gray-500">プロジェクトの設計資料・測定データ・実装コードは下記から入手できます（リンクは随時更新します）。</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <a href="spec.pdf" target="_blank" class="block p-6 bg-white rounded-xl border hover:shadow-md">
+                <div class="font-bold">技術仕様書 (PDF)</div>
+                <div class="text-xs text-gray-500 mt-2">設計図・測定データ・手順書</div>
+            </a>
+            <a href="#" target="_blank" class="block p-6 bg-white rounded-xl border hover:shadow-md">
+                <div class="font-bold">GitHub リポジトリ</div>
+                <div class="text-xs text-gray-500 mt-2">コード／スクリプト一式</div>
+            </a>
+            <a href="#" target="_blank" class="block p-6 bg-white rounded-xl border hover:shadow-md">
+                <div class="font-bold">追加データ (CSV / 画像)</div>
+                <div class="text-xs text-gray-500 mt-2">計測データ・実機写真</div>
+            </a>
         </div>
     </section>
 
@@ -573,57 +595,28 @@ for i in range(num_holes):
         </div>
     </section>
 
-    <!-- Section 4: Data & Analysis (Charts) -->
+    <!-- Section 4: Data & Analysis (Charts) - measurements pending -->
     <section id="data" class="py-24 bg-white">
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-16 scroll-reveal">
                 <span class="text-green-600 font-bold tracking-wider text-sm uppercase mb-2 block">Data Analysis</span>
-                <h2 class="text-3xl font-bold text-brand-dark mb-4">効果検証と研究精度</h2>
-                <p class="text-gray-500" data-cloudcannon-field="data.analysis_intro|markdown">「作った」だけで終わらない。エンジニアリングとしての定量評価。</p>
+                <h2 class="text-3xl font-bold text-brand-dark mb-4">計測データは現在準備中です</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">実運用・検証が完了し次第、定量的評価（時間削減、精度、消費電力、耐久性など）を掲載します。</p>
             </div>
-            <!-- Chart meta (hidden, editable via sidebar) -->
-            <div id="chart-meta" class="hidden" aria-hidden="true">
-                <span id="labor-labels" data-cloudcannon-field="data.labor_labels">手動管理(現状),システム導入後</span>
-                <span id="labor-dataset-label" data-cloudcannon-field="data.labor_dataset_label">年間作業時間 (時間)</span>
-                <span id="accuracy-y-title" data-cloudcannon-field="data.accuracy_y_title">ピッチ (mm)</span>
-                <span id="accuracy-theory-label" data-cloudcannon-field="data.accuracy_theory_label">理論値 (Target)</span>
-                <span id="accuracy-manual-label" data-cloudcannon-field="data.accuracy_manual_label">手曲げ加工 (Manual)</span>
-                <span id="accuracy-api-label" data-cloudcannon-field="data.accuracy_api_label">API生成 (Python)</span>
-            </div>
-                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                            <span class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center mr-3"><i class="fas fa-chart-bar"></i></span>
-                            省力化効果の試算
-                        </h3>
-                        <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full">-90%</span>
-                    </div>
-                    <div class="h-64">
-                        <canvas id="laborChart"></canvas>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-6 bg-slate-50 p-4 rounded-xl leading-relaxed">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        <span data-cloudcannon-field="data.labor_note|markdown">年間降雨日数を100日、1回の開閉・移動作業を30分として試算。システム導入により、年間約50時間の重労働を削減可能です。空いた時間はより付加価値の高い栽培管理に充てられます。</span>
-                    </p>
-                
 
-                <!-- Chart 2: Accuracy -->
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 scroll-reveal hover:shadow-2xl transition-shadow duration-300">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-3"><i class="fas fa-crosshairs"></i></span>
-                            ラックピッチ精度の検証
-                        </h3>
-                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">±0.05mm</span>
-                    </div>
-                    <div class="h-64">
-                        <canvas id="accuracyChart"></canvas>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-6 bg-slate-50 p-4 rounded-xl leading-relaxed">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        <span data-cloudcannon-field="data.accuracy_note|markdown">手作業での曲げ加工（赤線）と比較し、Python APIで生成したラック（青線）は理論値(12.38mm)に対して極めて高い精度を維持。これによりモータの脱調を防ぎます。</span>
-                    </p>
-                </div>
-            
-        
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
+                <h3 class="text-lg font-bold text-gray-800">予定している計測項目</h3>
+                <ul class="text-sm text-gray-600 mt-4 space-y-2">
+                    <li>年間労働時間削減（時間）</li>
+                    <li>ラックピッチ精度（平均±標準偏差、mm）</li>
+                    <li>作動成功率 / 再試行率（%）</li>
+                    <li>1サイクル当たりの消費電力（W·h）</li>
+                    <li>3Dプリント部品の耐久（サイクル数、故障率）</li>
+                    <li>雨検知の誤検知率（False Pos/Neg）</li>
+                </ul>
+                <p class="text-xs text-gray-500 mt-4">詳細な計測手順が必要であれば、プロトコル案を作成します。</p>
+            </div>
+        </div>
     </section>
 
     <!-- Section 5: Future & Learnings -->
@@ -679,8 +672,29 @@ for i in range(num_holes):
                                     <span class="text-sm text-gray-300">技術的に高度な機能でも、現場の農家さんが使えなければ意味がない。「説明書がいらないUI」へのこだわりが、実装の軸になりました。</span>
                                 </div>
                             </li>
+                            <li class="flex gap-4">
+                                <i class="fas fa-check-circle text-brand-accent mt-1"></i>
+                                <div>
+                                    <strong class="block text-white mb-1">リーダーシップと当事者意識</strong>
+                                    <span class="text-sm text-gray-300">学級委員やパートリーダー経験から、チームの文脈に基づく意思決定の重要性を学びました。リーダーの責任は個人で完結せず、チーム全体を自分ごととして捉える姿勢が鍵です。</span>
+                                </div>
+                            </li>
+                            <li class="flex gap-4">
+                                <i class="fas fa-check-circle text-brand-accent mt-1"></i>
+                                <div>
+                                    <strong class="block text-white mb-1">導入の持続可能性とユーザー志向</strong>
+                                    <span class="text-sm text-gray-300">サークルで作成したExcelのタスク管理表が形骸化した経験から、ツール導入時の持続可能性・属人化対策、ユーザーにとって真に価値ある設計が重要だと学びました。</span>
+                                </div>
+                            </li>
+                            <li class="flex gap-4">
+                                <i class="fas fa-check-circle text-brand-accent mt-1"></i>
+                                <div>
+                                    <strong class="block text-white mb-1">現場志向の成果志向</strong>
+                                    <span class="text-sm text-gray-300">某SIerのインターンでのEVラストワンマイル検討を通じ、消費者に届く“当たり前の価値”と付加価値の差を考える重要性を得ました。手触り感のある分野での実装を志向しています。</span>
+                                </div>
+                            </li>
                         </ul>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -699,7 +713,7 @@ for i in range(num_holes):
                 <a href="#" class="hover:text-white transition-colors"><i class="fas fa-envelope text-xl"></i></a>
             </div>
             <p class="text-xs text-gray-600">
-                &copy; 2025-2026 Kondo Miyu & Koyama Takeshi. All Rights Reserved.
+                &copy; 2025-2026 近藤未悠 & 小山猛. All Rights Reserved.
             </p>
         </div>
     </footer>
@@ -724,98 +738,9 @@ for i in range(num_holes):
             observer.observe(el);
         });
 
-        // --- Data Visualization (Chart.js) ---
-        
-        // 1. 省力化効果グラフ
-        const ctxLabor = document.getElementById('laborChart').getContext('2d');
-        (function(){
-            const laborLabelElem = document.getElementById('labor-labels');
-            const laborLabels = laborLabelElem ? laborLabelElem.innerText.split(',').map(s=>s.trim()).filter(Boolean) : ['手動管理(現状)','システム導入後'];
-            const laborDatasetLabelElem = document.getElementById('labor-dataset-label');
-            const laborDatasetLabel = laborDatasetLabelElem ? laborDatasetLabelElem.innerText.trim() : '年間作業時間 (時間)';
-
-            new Chart(ctxLabor, {
-                type: 'bar',
-                data: {
-                    labels: laborLabels,
-                    datasets: [{
-                        label: laborDatasetLabel,
-                        data: [50, 5],
-                        backgroundColor: ['rgba(203, 213, 225, 0.8)', 'rgba(34, 197, 94, 0.8)'],
-                        borderRadius: 8,
-                        barThickness: 40
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { display: false } },
-                        y: { grid: { display: false } }
-                    }
-                }
-            });
-        })();
-
-        // 2. 精度比較グラフ
-        const ctxAcc = document.getElementById('accuracyChart').getContext('2d');
-        (function(){
-            const theoryLabel = document.getElementById('accuracy-theory-label')?.innerText || '理論値 (Target)';
-            const manualLabel = document.getElementById('accuracy-manual-label')?.innerText || '手曲げ加工 (Manual)';
-            const apiLabel = document.getElementById('accuracy-api-label')?.innerText || 'API生成 (Python)';
-            const yTitle = document.getElementById('accuracy-y-title')?.innerText || 'ピッチ (mm)';
-
-            new Chart(ctxAcc, {
-                type: 'line',
-                data: {
-                    labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-                    datasets: [
-                        {
-                            label: theoryLabel,
-                            data: Array(10).fill(12.38),
-                            borderColor: 'rgba(59, 130, 246, 0.5)',
-                            borderDash: [5, 5],
-                            borderWidth: 2,
-                            pointRadius: 0
-                        },
-                        {
-                            label: manualLabel,
-                            data: [12.1, 12.6, 12.2, 12.8, 12.0, 12.5, 12.3, 12.9, 12.1, 12.7],
-                            borderColor: 'rgba(239, 68, 68, 0.4)',
-                            borderWidth: 1,
-                            tension: 0.4,
-                            pointRadius: 0
-                        },
-                        {
-                            label: apiLabel,
-                            data: [12.38, 12.39, 12.38, 12.37, 12.38, 12.39, 12.38, 12.38, 12.39, 12.38],
-                            borderColor: 'rgba(34, 197, 94, 1)',
-                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.2,
-                            fill: true
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { 
-                        y: { 
-                            min: 11.5, max: 13.0,
-                            title: { display: true, text: yTitle },
-                            grid: { borderDash: [2, 2] }
-                        },
-                        x: { grid: { display: false } }
-                    },
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
-        })();
+        // Data visualization removed: charts will be added when real measurement data is available
+        // (Labor saving & pitch-accuracy charts removed to avoid displaying simulated/placeholder results)
+    
     </script>
 
     
